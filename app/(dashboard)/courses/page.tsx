@@ -115,7 +115,7 @@ export default function Page() {
           {courses.map((course) => (
             <div
               key={course.id}
-              className="rounded-xl border border-slate-200 bg-white p-6 hover:shadow-md transition"
+              className="rounded-xl border shadow:md border-slate-200 bg-white p-6 hover:shadow-md transition"
             >
               <span className="text-xs font-medium text-indigo-600">
                 {course.category}
