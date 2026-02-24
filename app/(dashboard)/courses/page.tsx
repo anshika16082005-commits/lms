@@ -172,7 +172,7 @@ export default function Page() {
 
               <button className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition px-4 py-2 font-medium">
                 <BookOpen size={18} />
-                Enroll Now
+                Enroll
               </button>
             </div>
           ))}
