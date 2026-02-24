@@ -157,7 +157,7 @@ export default function Page() {
               </div>
 
               {/* Progress */}
-              <div className="mt-5">
+              {/* <div className="mt-5">
                 <div className="flex justify-between text-xs text-slate-500 mb-1">
                   <span>Progress</span>
                   <span>{progress}%</span>
@@ -168,11 +168,11 @@ export default function Page() {
                     style={{ width: `${progress}%` }}
                   />
                 </div>
-              </div>
+              </div> */}
 
               <button className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition px-4 py-2 font-medium">
                 <BookOpen size={18} />
-                Continue Course
+                Enroll Now
               </button>
             </div>
           ))}
