@@ -1,77 +1,95 @@
+"use client";
+
 import { BookOpen, Clock, BarChart3 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 type Course = {
-  id: number;
+  _id: number;
   title: string;
   description: string;
   level: "Beginner" | "Intermediate" | "Advanced";
   duration: string;
-  progress: number;
   category: string;
 };
 
-const courses: Course[] = [
-  {
-    id: 1,
-    title: "Data Structures & Algorithms",
-    description:
-      "Arrays, linked lists, trees, graphs, and problem-solving techniques.",
-    level: "Intermediate",
-    duration: "12 weeks",
-    progress: 65,
-    category: "Core CS",
-  },
-  {
-    id: 2,
-    title: "Operating Systems",
-    description: "Processes, threads, scheduling, memory, and file systems.",
-    level: "Advanced",
-    duration: "10 weeks",
-    progress: 30,
-    category: "Systems",
-  },
-  {
-    id: 3,
-    title: "Web Development with Next.js",
-    description:
-      "Build full-stack applications using React, Next.js, and APIs.",
-    level: "Beginner",
-    duration: "8 weeks",
-    progress: 90,
-    category: "Web",
-  },
-  {
-    id: 4,
-    title: "Database Systems",
-    description:
-      "Relational models, SQL, indexing, and transaction management.",
-    level: "Intermediate",
-    duration: "9 weeks",
-    progress: 40,
-    category: "Core CS",
-  },
-  {
-    id: 5,
-    title: "Computer Networks",
-    description:
-      "TCP/IP, routing, congestion control, and network security basics.",
-    level: "Intermediate",
-    duration: "8 weeks",
-    progress: 20,
-    category: "Systems",
-  },
-  {
-    id: 6,
-    title: "Introduction to Machine Learning",
-    description: "Supervised learning, neural networks, and model evaluation.",
-    level: "Advanced",
-    duration: "11 weeks",
-    progress: 10,
-    category: "AI",
-  },
-];
+// const courses: Course[] = [
+//   {
+//     id: 1,
+//     title: "Data Structures & Algorithms",
+//     description:
+//       "Arrays, linked lists, trees, graphs, and problem-solving techniques.",
+//     level: "Intermediate",
+//     duration: "12 weeks",
+//     progress: 65,
+//     category: "Core CS",
+//   },
+//   {
+//     id: 2,
+//     title: "Operating Systems",
+//     description: "Processes, threads, scheduling, memory, and file systems.",
+//     level: "Advanced",
+//     duration: "10 weeks",
+//     progress: 30,
+//     category: "Systems",
+//   },
+//   {
+//     id: 3,
+//     title: "Web Development with Next.js",
+//     description:
+//       "Build full-stack applications using React, Next.js, and APIs.",
+//     level: "Beginner",
+//     duration: "8 weeks",
+//     progress: 90,
+//     category: "Web",
+//   },
+//   {
+//     id: 4,
+//     title: "Database Systems",
+//     description:
+//       "Relational models, SQL, indexing, and transaction management.",
+//     level: "Intermediate",
+//     duration: "9 weeks",
+//     progress: 40,
+//     category: "Core CS",
+//   },
+//   {
+//     id: 5,
+//     title: "Computer Networks",
+//     description:
+//       "TCP/IP, routing, congestion control, and network security basics.",
+//     level: "Intermediate",
+//     duration: "8 weeks",
+//     progress: 20,
+//     category: "Systems",
+//   },
+//   {
+//     id: 6,
+//     title: "Introduction to Machine Learning",
+//     description: "Supervised learning, neural networks, and model evaluation.",
+//     level: "Advanced",
+//     duration: "11 weeks",
+//     progress: 10,
+//     category: "AI",
+//   },
+// ];
 
 export default function Page() {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const progress = 10;
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const res = await fetch("/api/course/getCourses");
+        if (!res.ok) throw new Error("Failed to fetch courses");
+        const data = await res.json();
+        console.log(data);
+        setCourses(data.allcourses ?? data);
+      } catch (err: any) {
+        console.error(err.message);
+      }
+    };
+    fetchCourses();
+  }, []);
   return (
     <div className="flex min-h-screen bg-white text-slate-900">
       {/* Sidebar */}
@@ -114,7 +132,7 @@ export default function Page() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {courses.map((course) => (
             <div
-              key={course.id}
+              key={course._id}
               className="rounded-xl border shadow:md border-slate-200 bg-white p-6 hover:shadow-md transition"
             >
               <span className="text-xs font-medium text-indigo-600">
@@ -142,12 +160,12 @@ export default function Page() {
               <div className="mt-5">
                 <div className="flex justify-between text-xs text-slate-500 mb-1">
                   <span>Progress</span>
-                  <span>{course.progress}%</span>
+                  <span>{progress}%</span>
                 </div>
                 <div className="w-full h-2 bg-slate-200 rounded-full">
                   <div
                     className="h-2 bg-indigo-600 rounded-full"
-                    style={{ width: `${course.progress}%` }}
+                    style={{ width: `${progress}%` }}
                   />
                 </div>
               </div>

@@ -24,7 +24,7 @@ function AvatarMenu() {
     <div>
       {/* PROFILE DROPDOWN */}
       <div className="relative">
-        <button onClick={() => setProfileOpen((p) => !p)}>
+        <button onClick={() => setProfileOpen((profileOpen) => !profileOpen)}>
           <img
             src={user.avatarUrl}
             className="h-9 w-9 rounded-full border object-cover"

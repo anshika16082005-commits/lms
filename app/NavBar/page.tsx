@@ -73,7 +73,7 @@ export default function NavBar() {
             >
               Sign Up
             </Link>
-            <AvatarMenu />
+            {/* <AvatarMenu /> */}
           </div>
 
           {/* Mobile Menu Button */}

@@ -1,5 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
-import User from "@/models/userModel";
+import User from "@/models/users";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -7,7 +7,7 @@ connect();
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
-    const { email, password } = reqBody;
+    const { email, password, role } = reqBody;
     //validation
     console.log(reqBody);
     const user = await User.findOne({ email });
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const tokenData = {
       id: user._id,
-      username: user.username,
+      name: user.name,
       email: user.email,
     };
     const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 type User = {
   _id: number;
-  username: string;
+  name: string;
   email: string;
 };
 
@@ -52,7 +52,7 @@ const Dashboard = () => {
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-800 border-b">
-                  Username
+                  name
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-semibold text-gray-800 border-b">
                   Email
@@ -68,7 +68,7 @@ const Dashboard = () => {
                   key={u._id}
                   className="hover:bg-gray-50 transition-colors border-b"
                 >
-                  <td className="px-4 py-3 text-gray-900">{u.username}</td>
+                  <td className="px-4 py-3 text-gray-900">{u.name}</td>
                   <td className="px-4 py-3 text-gray-700">{u.email}</td>
                   <td className="px-4 py-3 text-center space-x-3">
                     <button className="px-4 py-1 border border-gray-400 text-gray-700 rounded hover:bg-gray-100 active:bg-gray-200 transition">
