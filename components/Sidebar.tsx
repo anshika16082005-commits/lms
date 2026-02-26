@@ -92,7 +92,7 @@ function SidebarItem({
       <div
         className={`group relative flex items-center px-4 py-2 rounded-lg transition
         ${active ? "bg-blue-600 text-white" : "hover:bg-slate-800"}
-        ${collapsed ? "justify-center" : "gap-3"}`}
+        `}
       >
         {/* ICON */}
         {icon}

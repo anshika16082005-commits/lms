@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { data } from "framer-motion/client";
 
 /* =======================
    TYPES
@@ -23,7 +24,7 @@ type UserType = {
   name: string;
   email: string;
   role: string;
-  avatarUrl: string;
+  // avatarUrl: string;
   bio: string;
 };
 
@@ -38,17 +39,11 @@ type Certificate = {
    PROFILE PAGE
 ======================= */
 export default function ProfilePage() {
-  const avatarRef = useRef<HTMLInputElement | null>(null);
-  const certRef = useRef<HTMLInputElement | null>(null);
+  // const avatarRef = useRef<HTMLInputElement | null>(null);
+  // const certRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
-  const [user, setUser] = useState<UserType>({
-    name: "Aparna Yadav",
-    email: "aparna@20e.com",
-    role: "Student",
-    avatarUrl: "/images/avatar.jpg",
-    bio: "Passionate about teaching computer science and building scalable systems.",
-  });
+  const [user, setUser] = useState<UserType | null>(null);
 
   const [certificates, setCertificates] = useState<Certificate[]>([
     { id: 1, title: "Data Structures & Algorithms", issuedOn: "March 2024" },
@@ -61,10 +56,10 @@ export default function ProfilePage() {
   /* =======================
      HANDLERS
   ======================= */
-  const handleAvatarUpload = (file: File) => {
-    const preview = URL.createObjectURL(file);
-    setUser({ ...user, avatarUrl: preview });
-  };
+  // const handleAvatarUpload = (file: File) => {
+  //   const preview = URL.createObjectURL(file);
+  //   setUser({ ...user, avatarUrl: preview });
+  // };
 
   const handleCertificateUpload = (file: File) => {
     const fileUrl = URL.createObjectURL(file);
@@ -81,6 +76,20 @@ export default function ProfilePage() {
     setCertDate("");
   };
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const res = await fetch("/api/users/me", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const { data } = await res.json();
+      setUser(data);
+    };
+    fetchProfile();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* MAIN CONTENT */}
@@ -90,17 +99,15 @@ export default function ProfilePage() {
         {/* PROFILE CARD */}
         <div className="bg-white border rounded-xl shadow-sm p-6 flex gap-6 items-center">
           <div className="relative group">
-            <div className="h-24 w-24 rounded-full overflow-hidden border">
-              <Image
-                src={user.avatarUrl}
-                alt="avatar"
-                width={96}
-                height={96}
-                className="object-cover"
+            <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-100">
+              <img
+                src={"/images/cybersecurity.jpg"}
+                alt=""
+                className="w-full h-full object-cover"
               />
             </div>
 
-            <button
+            {/* <button
               onClick={() => avatarRef.current?.click()}
               className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 rounded-full flex items-center justify-center transition"
             >
@@ -115,16 +122,16 @@ export default function ProfilePage() {
               onChange={(e) =>
                 e.target.files && handleAvatarUpload(e.target.files[0])
               }
-            />
+            /> */}
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold">{user.name}</h2>
-            <p className="text-gray-500">{user.email}</p>
+            <h2 className="text-2xl font-bold">{user?.name}</h2>
+            <p className="text-gray-500">{user?.email}</p>
             <span className="inline-block mt-2 text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-              {user.role}
+              {user?.role}
             </span>
-            <p className="mt-4 text-gray-600 max-w-xl">{user.bio}</p>
+            <p className="mt-4 text-gray-600 max-w-xl">{user?.bio}</p>
           </div>
         </div>
       </main>

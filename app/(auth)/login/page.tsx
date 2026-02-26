@@ -103,6 +103,9 @@ const LoginTest = () => {
 
       if (data?.user?.role === "admin") {
         router.push("/admin/dashboard");
+      }
+      if (data.user.role === "instructor") {
+        router.push("/teacherProfile");
       } else {
         router.push("/profile");
       }

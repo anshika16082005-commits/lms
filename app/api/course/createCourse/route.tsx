@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({
       message: "New Course created successfully",
       success: true,
+      savedCourse,
     });
     return response;
   } catch (error: any) {

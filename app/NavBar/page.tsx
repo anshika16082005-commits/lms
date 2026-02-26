@@ -29,7 +29,7 @@ export default function NavBar() {
             </li>
             <li>
               <Link
-                href="/about"
+                href="/About"
                 className="hover:text-emerald-400 active:text-emerald-500 transition-colors duration-200"
               >
                 About
@@ -37,7 +37,7 @@ export default function NavBar() {
             </li>
             <li>
               <Link
-                href="/services"
+                href="/Services"
                 className="hover:text-emerald-400 active:text-emerald-500 transition-colors duration-200"
               >
                 Services

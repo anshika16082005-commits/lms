@@ -9,7 +9,7 @@ const SignupPage = () => {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -20,7 +20,7 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState<{
-    username?: string;
+    name?: string;
     email?: string;
     password?: string;
     confirmPassword?: string;
@@ -29,8 +29,8 @@ const SignupPage = () => {
 
   // ✅ Validation Functions
   const validateUsername = (value: string) => {
-    if (!value) return "Username is required";
-    if (value.length < 3) return "Username must be at least 3 characters";
+    if (!value) return "Name is required";
+    if (value.length < 3) return "Name must be at least 3 characters";
     return "";
   };
 
@@ -64,7 +64,7 @@ const SignupPage = () => {
     setErrors((prev) => ({
       ...prev,
       [name]:
-        name === "username"
+        name === "name"
           ? validateUsername(value)
           : name === "email"
             ? validateEmail(value)
@@ -79,14 +79,14 @@ const SignupPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const usernameError = validateUsername(formData.username);
+    const nameError = validateUsername(formData.name);
     const emailError = validateEmail(formData.email);
     const passwordError = validatePassword(formData.password);
     const confirmError = validateConfirmPassword(formData.confirmPassword);
 
-    if (usernameError || emailError || passwordError || confirmError) {
+    if (nameError || emailError || passwordError || confirmError) {
       setErrors({
-        username: usernameError,
+        name: nameError,
         email: emailError,
         password: passwordError,
         confirmPassword: confirmError,
@@ -114,7 +114,6 @@ const SignupPage = () => {
         });
         return;
       }
-
       router.push("/login");
     } catch (error) {
       setErrors({
@@ -138,19 +137,19 @@ const SignupPage = () => {
             <label className="block text-sm font-medium mb-1">Username</label>
             <input
               type="text"
-              id="username"
-              name="username"
-              value={formData.username}
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               className={`w-full px-3 py-2 border rounded-md focus:outline-none ${
-                errors.username
+                errors.name
                   ? "border-red-500 focus:ring-2 focus:ring-red-300"
                   : "border-gray-300 focus:ring-2 focus:ring-blue-300"
               }`}
               placeholder="Enter your username"
             />
-            {errors.username && (
-              <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
             )}
           </div>
 
