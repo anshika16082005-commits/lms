@@ -32,7 +32,7 @@ export default function TeacherLayout({
       href: "/createcourse",
       icon: PlusCircle,
     },
-    { name: "My Courses", href: "/teacher-temp/courses", icon: BookOpen },
+    { name: "My Courses", href: "/my-courses", icon: BookOpen },
     { name: "Students", href: "/teacher-temp/students", icon: Users },
     { name: "Earnings", href: "/teacher-temp/earnings", icon: Wallet },
     { name: "Analytics", href: "/teacher-temp/analytics", icon: BarChart3 },

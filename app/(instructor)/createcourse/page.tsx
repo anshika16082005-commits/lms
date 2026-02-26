@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Course = {
-  _id: number;
   title: string;
+  instructor: number;
   description: string;
   level: "Beginner" | "Intermediate" | "Advanced";
   duration: string;
@@ -12,7 +12,7 @@ type Course = {
 };
 
 const CreateCoursePage = () => {
-  const [formData, setFormData] = useState<Omit<Course, "_id">>({
+  const [formData, setFormData] = useState<Omit<Course, "instructor">>({
     title: "",
     description: "",
     level: "Beginner",
@@ -23,7 +23,7 @@ const CreateCoursePage = () => {
   const [errors, setErrors] = useState<Partial<Record<keyof Course, string>>>(
     {},
   );
-
+  const [instructor, setInstructor] = useState<number | null>(null);
   const validate = () => {
     const newErrors: Partial<Record<keyof Course, string>> = {};
 
@@ -65,13 +65,12 @@ const CreateCoursePage = () => {
     if (!validate()) return;
 
     try {
-      // Replace with your API endpoint
-      const res = await fetch("/api/courses", {
+      const res = await fetch("/api/course/createCourse", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, instructor }),
       });
 
       if (res.ok) {
@@ -90,6 +89,22 @@ const CreateCoursePage = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetch("/api/users/me", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const { data } = await response.json();
+      setInstructor(data._id);
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded-xl">
