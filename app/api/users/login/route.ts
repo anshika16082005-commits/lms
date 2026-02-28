@@ -1,6 +1,7 @@
 import { connect } from "@/dbConfig/dbConfig";
 import User from "@/models/users";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 connect();
@@ -39,7 +40,10 @@ export async function POST(request: NextRequest) {
       success: true,
       user,
     });
-    response.cookies.set("token", token, { httpOnly: true });
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      path: "/",
+    });
     return response;
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

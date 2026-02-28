@@ -251,8 +251,8 @@ function ReadyToStartLearning() {
           Join our community of learners and take your skills to the next level.
         </p>
 
-        <Link href="/login">
-          <motion.button
+        <Link href="/login" passHref>
+          <motion.a
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="
@@ -267,7 +267,7 @@ function ReadyToStartLearning() {
           "
           >
             Access Your Dashboard →
-          </motion.button>
+          </motion.a>
         </Link>
       </motion.div>
     </section>

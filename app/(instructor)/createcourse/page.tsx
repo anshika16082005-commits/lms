@@ -70,7 +70,7 @@ const CreateCoursePage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, instructor }),
+        body: JSON.stringify({ ...formData }),
       });
 
       if (res.ok) {
@@ -90,21 +90,7 @@ const CreateCoursePage = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch("/api/users/me", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const { data } = await response.json();
-      setInstructor(data._id);
-    };
-
-    fetchUser();
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded-xl">
