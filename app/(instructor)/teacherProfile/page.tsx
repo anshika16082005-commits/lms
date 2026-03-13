@@ -7,8 +7,6 @@ import {
   Award,
   DollarSign,
   CheckCircle,
-  Github,
-  Linkedin,
   Globe,
 } from "lucide-react";
 
@@ -162,18 +160,14 @@ export default function InstructorProfile() {
                   href={instructor.socialLinks.github}
                   target="_blank"
                   className="text-gray-600 hover:text-black"
-                >
-                  <Github />
-                </a>
+                ></a>
               )}
               {instructor.socialLinks?.linkedin && (
                 <a
                   href={instructor.socialLinks.linkedin}
                   target="_blank"
                   className="text-blue-600 hover:text-blue-800"
-                >
-                  <Linkedin />
-                </a>
+                ></a>
               )}
               {instructor.socialLinks?.website && (
                 <a

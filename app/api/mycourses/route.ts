@@ -1,13 +1,13 @@
 import { connect } from "@/dbConfig/dbConfig";
 import Course from "@/models/courseModel";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 connect();
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const reqBody = await request.json();
-    const { instructor } = reqBody;
+    const instructor = request.headers.get("x-user-id");
     const allcourses = await Course.find({ instructor });
     if (!allcourses) {
       return NextResponse.json({ error: "No course found" }, { status: 400 });

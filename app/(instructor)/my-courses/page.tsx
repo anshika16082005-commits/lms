@@ -17,36 +17,16 @@ type Course = {
 export default function MyCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const [instructor, setInstructor] = useState<number | null>(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const response = await fetch("/api/users/me", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const { data } = await response.json();
-      setInstructor(data._id);
-    };
-
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    if (!instructor) return;
-
     const fetchCourses = async () => {
       try {
         const res = await fetch("/api/mycourses", {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ instructor }),
         });
-
         const { allcourses } = await res.json();
         setCourses(allcourses);
       } catch (error) {
@@ -57,7 +37,7 @@ export default function MyCoursesPage() {
     };
 
     fetchCourses();
-  }, [instructor]);
+  }, []);
 
   if (loading) {
     return (
@@ -147,7 +127,7 @@ export default function MyCoursesPage() {
                   </span> */}
 
                 <Link
-                  href={`/teacher-temp/courses/${course._id}`}
+                  href={`/my-courses/manage/${course._id}`}
                   className="text-blue-600 text-sm font-medium hover:underline"
                 >
                   Manage

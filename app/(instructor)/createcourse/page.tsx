@@ -23,7 +23,6 @@ const CreateCoursePage = () => {
   const [errors, setErrors] = useState<Partial<Record<keyof Course, string>>>(
     {},
   );
-  const [instructor, setInstructor] = useState<number | null>(null);
   const validate = () => {
     const newErrors: Partial<Record<keyof Course, string>> = {};
 
@@ -32,7 +31,6 @@ const CreateCoursePage = () => {
     } else if (formData.title.length < 5) {
       newErrors.title = "Title must be at least 5 characters";
     }
-
     if (!formData.description.trim()) {
       newErrors.description = "Description is required";
     } else if (formData.description.length < 20) {

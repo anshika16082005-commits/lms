@@ -251,11 +251,10 @@ function ReadyToStartLearning() {
           Join our community of learners and take your skills to the next level.
         </p>
 
-        <Link href="/login" passHref>
-          <motion.a
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="
+        <motion.a
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="
             inline-flex items-center gap-2
             rounded-lg
             bg-white px-7 py-3
@@ -265,10 +264,10 @@ function ReadyToStartLearning() {
             hover:bg-gray-100
             transition
           "
-          >
-            Access Your Dashboard →
-          </motion.a>
-        </Link>
+          href="/login"
+        >
+          Access Your Dashboard →
+        </motion.a>
       </motion.div>
     </section>
   );

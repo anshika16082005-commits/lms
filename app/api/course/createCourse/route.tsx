@@ -1,5 +1,6 @@
 import { connect } from "@/dbConfig/dbConfig";
 import Course from "@/models/courseModel";
+import User from "@/models/users";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -9,9 +10,7 @@ export async function POST(request: NextRequest) {
     const instructor = request.headers.get("x-user-id");
     const reqBody = await request.json();
     const { title, description, duration, level, category } = reqBody;
-    //validation
-    console.log("create course instructor id :", instructor);
-    console.log(reqBody);
+
     const duplicate = await Course.findOne({ title, instructor });
     if (duplicate) {
       return NextResponse.json(
@@ -19,7 +18,6 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-    console.log("Course does not exist already");
 
     const newCourse = new Course({
       title,
@@ -31,11 +29,16 @@ export async function POST(request: NextRequest) {
     });
 
     const savedCourse = await newCourse.save();
-    // creator.createdCourses.append(savedCourse._id);
-    console.log(savedCourse, "from : create-course");
+    await User.findByIdAndUpdate(instructor, {
+      $push: {
+        createdCourses: savedCourse._id,
+      },
+    });
+
     const response = NextResponse.json({
       message: "New Course created successfully",
       success: true,
+      status: 201,
       savedCourse,
     });
     return response;

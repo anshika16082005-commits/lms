@@ -10,11 +10,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   console.log("Middleware triggered:", request.nextUrl.pathname);
-  console.log(secret, token);
 
   try {
     const { payload } = await jwtVerify(token!, secret);
-    console.log(payload);
+
     const userId = (payload as { id: string }).id;
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-user-id", userId);
@@ -29,5 +28,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/my-courses", "/createcourse", "/api/course/createCourse"],
+  matcher: [
+    "/my-courses",
+    "/createcourse",
+    "/api/course/createCourse",
+    "/api/mycourses",
+  ],
 };
