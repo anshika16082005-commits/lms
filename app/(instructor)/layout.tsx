@@ -33,11 +33,11 @@ export default function TeacherLayout({
       icon: PlusCircle,
     },
     { name: "My Courses", href: "/my-courses", icon: BookOpen },
-    { name: "Students", href: "/teacher-temp/students", icon: Users },
-    { name: "Earnings", href: "/teacher-temp/earnings", icon: Wallet },
-    { name: "Analytics", href: "/teacher-temp/analytics", icon: BarChart3 },
+    { name: "Students", href: "/students", icon: Users },
+    { name: "Earnings", href: "/earnings", icon: Wallet },
+    { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: "Profile", href: "/teacherProfile", icon: User },
-    { name: "Settings", href: "/teacher-temp/settings", icon: Settings },
+    { name: "Settings", href: "/setting", icon: Settings },
   ];
 
   return (

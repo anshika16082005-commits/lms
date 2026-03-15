@@ -1,99 +1,159 @@
-export default function TeacherDashboard() {
+"use client";
+
+import { Users, BookOpen, Star, TrendingUp, PlusCircle } from "lucide-react";
+
+export default function InstructorDashboard() {
+  const courses = [
+    {
+      title: "React Bootcamp",
+      students: 850,
+      rating: 4.8,
+      updated: "2 days ago",
+    },
+    {
+      title: "Node.js Mastery",
+      students: 620,
+      rating: 4.7,
+      updated: "1 week ago",
+    },
+    {
+      title: "MongoDB Basics",
+      students: 420,
+      rating: 4.6,
+      updated: "3 weeks ago",
+    },
+  ];
+
   return (
-    <div className="space-y-10">
-      {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">
-            Overview of your courses, students and earnings.
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
 
-      {/* Stats Section */}
-      <div className="grid gap-6 md:grid-cols-3">
-        {/* Total Courses */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-sm text-gray-500">Total Courses</p>
-              <h2 className="text-3xl font-semibold mt-2 text-gray-900">8</h2>
+        <div className="flex justify-between items-center mb-10">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              Instructor Dashboard
+            </h1>
+
+            <p className="text-gray-500 text-sm">
+              Welcome back! Here's an overview of your courses
+            </p>
+          </div>
+
+          <button className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-lg hover:bg-indigo-700 transition">
+            <PlusCircle size={18} />
+            Create Course
+          </button>
+        </div>
+
+        {/* Stats Cards */}
+
+        <div className="grid md:grid-cols-4 gap-6 mb-10">
+          <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div className="p-3 bg-indigo-100 rounded-lg">
+              <Users className="text-indigo-600" size={24} />
             </div>
-            <div className="h-10 w-10 bg-indigo-100 rounded-lg"></div>
+
+            <div>
+              <p className="text-gray-500 text-sm">Total Students</p>
+              <h2 className="text-2xl font-bold">3,240</h2>
+              <p className="text-green-600 text-xs">+12% this month</p>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div className="p-3 bg-indigo-100 rounded-lg">
+              <BookOpen className="text-indigo-600" size={24} />
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm">Courses</p>
+              <h2 className="text-2xl font-bold">12</h2>
+              <p className="text-gray-400 text-xs">Active courses</p>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div className="p-3 bg-yellow-100 rounded-lg">
+              <Star className="text-yellow-500" size={24} />
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm">Average Rating</p>
+              <h2 className="text-2xl font-bold">4.8</h2>
+              <p className="text-gray-400 text-xs">Across all courses</p>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
+            <div className="p-3 bg-green-100 rounded-lg">
+              <TrendingUp className="text-green-600" size={24} />
+            </div>
+
+            <div>
+              <p className="text-gray-500 text-sm">Completion Rate</p>
+              <h2 className="text-2xl font-bold">78%</h2>
+              <p className="text-green-600 text-xs">+5% improvement</p>
+            </div>
           </div>
         </div>
 
-        {/* Total Students */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-sm text-gray-500">Total Students</p>
-              <h2 className="text-3xl font-semibold mt-2 text-gray-900">320</h2>
-            </div>
-            <div className="h-10 w-10 bg-green-100 rounded-lg"></div>
-          </div>
-        </div>
+        {/* Content Section */}
 
-        {/* Revenue */}
-        <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-sm text-gray-500">Total Revenue</p>
-              <h2 className="text-3xl font-semibold mt-2 text-gray-900">
-                ₹24,000
-              </h2>
-            </div>
-            <div className="h-10 w-10 bg-yellow-100 rounded-lg"></div>
-          </div>
-        </div>
-      </div>
+        <div className="grid md:grid-cols-2 gap-8">
+          {/* Recent Courses */}
 
-      {/* Recent Courses Section */}
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm">
-        <div className="p-6 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-gray-900">
-            Recent Courses
-          </h3>
-        </div>
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="text-lg font-semibold mb-6">Your Courses</h2>
 
-        <div className="divide-y divide-gray-100">
-          <div className="flex justify-between items-center p-6">
-            <div>
-              <p className="font-medium text-gray-900">
-                Full Stack MERN Development
-              </p>
-              <p className="text-sm text-gray-500 mt-1">
-                120 students enrolled
-              </p>
+            <div className="space-y-5">
+              {courses.map((course, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center border-b pb-4"
+                >
+                  <div>
+                    <p className="font-medium text-gray-800">{course.title}</p>
+
+                    <p className="text-sm text-gray-500">
+                      {course.students} students
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="text-sm">⭐ {course.rating}</p>
+
+                    <p className="text-xs text-gray-400">
+                      Updated {course.updated}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
-            <button className="text-indigo-600 text-sm font-medium hover:underline">
-              Manage
-            </button>
           </div>
 
-          <div className="flex justify-between items-center p-6">
-            <div>
-              <p className="font-medium text-gray-900">
-                Advanced React Patterns
-              </p>
-              <p className="text-sm text-gray-500 mt-1">85 students enrolled</p>
-            </div>
-            <button className="text-indigo-600 text-sm font-medium hover:underline">
-              Manage
-            </button>
-          </div>
+          {/* Quick Actions */}
 
-          <div className="flex justify-between items-center p-6">
-            <div>
-              <p className="font-medium text-gray-900">
-                Node.js Backend Mastery
-              </p>
-              <p className="text-sm text-gray-500 mt-1">40 students enrolled</p>
+          <div className="bg-white rounded-xl shadow p-6">
+            <h2 className="text-lg font-semibold mb-6">Quick Actions</h2>
+
+            <div className="grid grid-cols-2 gap-4">
+              <button className="bg-indigo-50 text-indigo-700 p-4 rounded-lg hover:bg-indigo-100 transition text-sm font-medium">
+                Create New Course
+              </button>
+
+              <button className="bg-green-50 text-green-700 p-4 rounded-lg hover:bg-green-100 transition text-sm font-medium">
+                Manage Courses
+              </button>
+
+              <button className="bg-yellow-50 text-yellow-700 p-4 rounded-lg hover:bg-yellow-100 transition text-sm font-medium">
+                View Analytics
+              </button>
+
+              <button className="bg-purple-50 text-purple-700 p-4 rounded-lg hover:bg-purple-100 transition text-sm font-medium">
+                Edit Profile
+              </button>
             </div>
-            <button className="text-indigo-600 text-sm font-medium hover:underline">
-              Manage
-            </button>
           </div>
         </div>
       </div>

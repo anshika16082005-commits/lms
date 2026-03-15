@@ -5,9 +5,12 @@ import Link from "next/link";
 import { BookOpen, Users, IndianRupee } from "lucide-react";
 
 type Course = {
-  _id: number;
+  _id?: number;
   title: string;
   description: string;
+  enrolledStudents: string[];
+  price: number;
+  isPublished: boolean;
   thumbnail?: string;
   level: "Beginner" | "Intermediate" | "Advanced";
   duration: string;
@@ -85,7 +88,7 @@ export default function MyCoursesPage() {
               {/* Thumbnail */}
               <div className="h-40 bg-gray-200">
                 <img
-                  src={course.thumbnail || "/images/cybersecurity.jpg"}
+                  src={course.thumbnail || "/images/softwaredevelopment.jpg"}
                   alt={course.title}
                   className="w-full h-full object-cover"
                 />
@@ -102,20 +105,20 @@ export default function MyCoursesPage() {
                 </p>
 
                 {/* Stats */}
-                {/* <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                   <div className="flex items-center gap-1">
                     <Users size={16} />
-                    {course.studentsEnrolled || 0}
+                    {course.enrolledStudents.length || 0}
                   </div>
 
                   <div className="flex items-center gap-1">
                     <IndianRupee size={16} />
                     {course.price || 0}
                   </div>
-                </div> */}
+                </div>
 
                 {/* Status */}
-                {/* <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between">
                   <span
                     className={`text-xs px-3 py-1 rounded-full font-medium ${
                       course.isPublished
@@ -124,14 +127,14 @@ export default function MyCoursesPage() {
                     }`}
                   >
                     {course.isPublished ? "Published" : "Draft"}
-                  </span> */}
-
-                <Link
-                  href={`/my-courses/manage/${course._id}`}
-                  className="text-blue-600 text-sm font-medium hover:underline"
-                >
-                  Manage
-                </Link>
+                  </span>
+                  <Link
+                    href={`/my-courses/manage/${course._id}`}
+                    className="text-blue-600 text-sm font-medium hover:underline"
+                  >
+                    Manage
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

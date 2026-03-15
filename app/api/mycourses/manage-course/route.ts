@@ -19,7 +19,7 @@ export async function GET() {
   }
 }
 
-export async function DELETE(request: NextRequest, response: NextResponse) {
+export async function DELETE(request: NextRequest) {
   try {
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
