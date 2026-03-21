@@ -8,8 +8,14 @@ connect();
 export async function POST(request: NextRequest) {
   try {
     const instructor = request.headers.get("x-user-id");
-    const reqBody = await request.json();
-    const { title, description, duration, level, category } = reqBody;
+    const formData = await request.formData();
+
+    const title = formData.get("title") as string;
+    const description = formData.get("description") as string;
+    const duration = formData.get("duration") as string;
+    const level = formData.get("level") as string;
+    const category = formData.get("category") as string;
+    const thumbnail = formData.get("thumbnail") as File | null;
 
     const duplicate = await Course.findOne({ title, instructor });
     if (duplicate) {
@@ -26,6 +32,7 @@ export async function POST(request: NextRequest) {
       level,
       instructor,
       duration,
+      thumbnail,
     });
 
     const savedCourse = await newCourse.save();

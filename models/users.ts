@@ -16,9 +16,9 @@ export interface IUser extends Document {
     github?: string;
     website?: string;
   };
-  isVerified?: boolean;
   totalEarnings?: number;
   createdCourses?: mongoose.Types.ObjectId[];
+  isVerified?: boolean;
   forgotPasswordToken: String;
   forgotPasswordTokenExpiry: Date;
   verifyToken: String;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type Course = {
@@ -19,6 +20,9 @@ const CreateCoursePage = () => {
     duration: "",
     category: "",
   });
+
+  const router = useRouter();
+  const [thumbnail, setThumbnail] = useState<File | null>(null);
 
   const [errors, setErrors] = useState<Partial<Record<keyof Course, string>>>(
     {},
@@ -59,43 +63,55 @@ const CreateCoursePage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setThumbnail(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validate()) return;
 
+    const formPayload = new FormData();
+
+    formPayload.append("title", formData.title);
+    formPayload.append("description", formData.description);
+    formPayload.append("level", formData.level);
+    formPayload.append("duration", formData.duration);
+    formPayload.append("category", formData.category);
+
+    if (thumbnail) {
+      formPayload.append("thumbnail", thumbnail);
+    }
+
     const res = await fetch("/api/course/createCourse", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...formData }),
+      body: formPayload,
     });
 
     if (res.ok) {
       alert("Course Created Successfully!");
+      router.push("/my-courses");
     } else {
       alert("Something went wrong");
     }
   };
 
   return (
-    <div className="bg-white min-h-screen px-10 py-8">
+    <div className="text-white min-h-screen px-10 py-8">
       {/* Page Title */}
       <div className="mb-10">
-        <h1 className="text-3xl font-semibold text-gray-900">
-          Create New Course
-        </h1>
-        <p className="text-gray-500 mt-1">
-          Add the basic details for your course
-        </p>
+        <h1 className="text-3xl font-semibold ">Create New Course</h1>
+        <p className="text-white mt-1">Add the basic details for your course</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-10 max-w-4xl">
         {/* Course Title */}
         <div className="grid grid-cols-3 gap-6 items-start">
           <div>
-            <h3 className="font-medium text-gray-900">Course Title</h3>
+            <h3 className="font-medium ">Course Title</h3>
             <p className="text-sm text-gray-500">
               Write a clear and descriptive title
             </p>
@@ -107,7 +123,7 @@ const CreateCoursePage = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border rounded-md p-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.title && (
               <p className="text-red-500 text-sm mt-1">{errors.title}</p>
@@ -118,7 +134,7 @@ const CreateCoursePage = () => {
         {/* Description */}
         <div className="grid grid-cols-3 gap-6 items-start">
           <div>
-            <h3 className="font-medium text-gray-900">Description</h3>
+            <h3 className="font-medium ">Description</h3>
             <p className="text-sm text-gray-500">
               Describe what students will learn
             </p>
@@ -130,7 +146,7 @@ const CreateCoursePage = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border rounded-md p-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.description && (
               <p className="text-red-500 text-sm mt-1">{errors.description}</p>
@@ -141,7 +157,7 @@ const CreateCoursePage = () => {
         {/* Level */}
         <div className="grid grid-cols-3 gap-6 items-start">
           <div>
-            <h3 className="font-medium text-gray-900">Course Level</h3>
+            <h3 className="font-medium ">Course Level</h3>
             <p className="text-sm text-gray-500">Select difficulty level</p>
           </div>
 
@@ -150,7 +166,7 @@ const CreateCoursePage = () => {
               name="level"
               value={formData.level}
               onChange={handleChange}
-              className="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border bg-gray-700 text-white rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="Beginner">Beginner</option>
               <option value="Intermediate">Intermediate</option>
@@ -162,7 +178,7 @@ const CreateCoursePage = () => {
         {/* Duration */}
         <div className="grid grid-cols-3 gap-6 items-start">
           <div>
-            <h3 className="font-medium text-gray-900">Duration</h3>
+            <h3 className="font-medium ">Duration</h3>
             <p className="text-sm text-gray-500">Estimated time to complete</p>
           </div>
 
@@ -173,7 +189,7 @@ const CreateCoursePage = () => {
               placeholder="e.g. 8 weeks"
               value={formData.duration}
               onChange={handleChange}
-              className="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-700 text-white border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.duration && (
               <p className="text-red-500 text-sm mt-1">{errors.duration}</p>
@@ -184,7 +200,7 @@ const CreateCoursePage = () => {
         {/* Category */}
         <div className="grid grid-cols-3 gap-6 items-start">
           <div>
-            <h3 className="font-medium text-gray-900">Category</h3>
+            <h3 className="font-medium ">Category</h3>
             <p className="text-sm text-gray-500">Course subject or field</p>
           </div>
 
@@ -194,7 +210,7 @@ const CreateCoursePage = () => {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border bg-gray-700 text-white rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.category && (
               <p className="text-red-500 text-sm mt-1">{errors.category}</p>
@@ -202,7 +218,31 @@ const CreateCoursePage = () => {
           </div>
         </div>
 
-        {/* Submit Button */}
+        {/* Thumbnail Upload */}
+        <div className="grid grid-cols-3 gap-6 items-start">
+          <div>
+            <h3 className="font-medium ">Course Thumbnail</h3>
+            <p className="text-sm text-gray-500">
+              Upload an image that represents your course
+            </p>
+          </div>
+
+          <div className="col-span-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailChange}
+              className="w-full border bg-gray-700 text-white rounded-md p-3"
+            />
+            {thumbnail && (
+              <p className="text-sm text-green-600 mt-2">
+                Selected: {thumbnail.name}
+              </p>
+            )}
+          </div>
+        </div>
+
+        {/* Submit */}
         <div className="flex justify-end pt-6 border-t">
           <button
             type="submit"

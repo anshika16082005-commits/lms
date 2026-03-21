@@ -1,22 +1,61 @@
 "use client";
 
 import { Github, Linkedin, Globe, BookOpen, Users, Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function InstructorProfile() {
-  const instructor = {
-    name: "John Doe",
-    bio: "Senior Full Stack Developer and Instructor with a passion for teaching modern web technologies. Helping thousands of students learn programming and build real world applications.",
-    expertise: ["React", "Node.js", "MongoDB", "Next.js", "AWS"],
-    experience: 8,
-    profileImage:
-      "https://images.unsplash.com/photo-1607746882042-944635dfe10e",
-
+  const [instructor, setInstructor] = useState({
+    name: "",
+    profileImage: "",
+    bio: "",
+    expertise: [],
+    createdCourses: [],
+    experience: 0,
     socialLinks: {
-      linkedin: "#",
-      github: "#",
-      website: "#",
+      linkedin: "",
+      github: "",
+      website: "",
     },
-  };
+  });
+
+  useEffect(() => {
+    const fetchInstructor = async () => {
+      try {
+        const res = await fetch("/api/users/me", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const { data } = await res.json();
+        setInstructor({
+          name: data.name ? data.name : "John Doe",
+          profileImage: data.profileImage
+            ? data.profileImage
+            : "https://images.unsplash.com/photo-1607746882042-944635dfe10e",
+          bio: data.bio
+            ? data.bio
+            : "Passionate educator with 8+ years of experience in web development. Dedicated to empowering students with practical skills and real-world knowledge.",
+          expertise: data.expertise
+            ? data.expertise
+            : ["Web Development", "JavaScript", "React"],
+          experience: data.experience ? data.experience : 8,
+          createdCourses: data.createdCourses ? data.createdCourses : [],
+
+          socialLinks: data.socialLinks
+            ? data.socialLinks
+            : {
+                linkedin: "#",
+                github: "#",
+                website: "#",
+              },
+        });
+      } catch (error) {
+        console.error("Error fetching instructor profile:", error);
+      }
+    };
+    fetchInstructor();
+  }, []);
 
   return (
     <div className="bg-gray-50 min-h-screen">
@@ -29,7 +68,10 @@ export default function InstructorProfile() {
           <div className="flex flex-col md:flex-row gap-8">
             {/* Profile Image */}
             <img
-              src={instructor.profileImage}
+              src={
+                instructor.profileImage ||
+                "https://images.unsplash.com/photo-1607746882042-944635dfe10e"
+              }
               className="w-40 h-40 rounded-xl object-cover border-4 border-white shadow-md"
             />
 
@@ -91,15 +133,19 @@ export default function InstructorProfile() {
           <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
             <BookOpen className="text-indigo-600" size={28} />
             <div>
-              <h3 className="text-xl font-bold">12</h3>
-              <p className="text-gray-500 text-sm">Courses</p>
+              <h3 className="text-xl font-bold">
+                {instructor.createdCourses?.length || 0}
+              </h3>
+              <p className="text-gray-500 text-sm">
+                {instructor.createdCourses?.length === 1 ? "Course" : "Courses"}
+              </p>
             </div>
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
             <Users className="text-indigo-600" size={28} />
             <div>
-              <h3 className="text-xl font-bold">3,200</h3>
+              <h3 className="text-xl font-bold">{}</h3>
               <p className="text-gray-500 text-sm">Students</p>
             </div>
           </div>
@@ -116,7 +162,7 @@ export default function InstructorProfile() {
         {/* Courses Section */}
         <div className="mt-10">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">
-            Courses by {instructor.name}
+            Courses by {instructor.name.toUpperCase()}
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -125,9 +171,15 @@ export default function InstructorProfile() {
                 key={course}
                 className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
               >
-                <div className="h-40 bg-gray-200"></div>
+                <div className="h-40">
+                  <img
+                    src="/images/softwaredevelopment.jpg"
+                    alt=""
+                    className="bg-cover"
+                  />
+                </div>
 
-                <div className="p-4">
+                <div className="p-4 mt-2">
                   <h3 className="font-semibold text-gray-800">
                     Full Stack Web Development
                   </h3>

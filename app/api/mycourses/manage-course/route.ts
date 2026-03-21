@@ -12,15 +12,24 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
-
-export async function DELETE(request: NextRequest) {
-  try {
+    const courseId = request.nextUrl.searchParams.get("courseId");
+    if (!courseId) {
+      return NextResponse.json(
+        { error: "Course ID is required" },
+        { status: 400 },
+      );
+    }
+    const course = await Course.findById(courseId).populate(
+      "instructor",
+      "name email",
+    );
+    return NextResponse.json({
+      message: "Course details fetched successfully",
+      data: course,
+      status: 200,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

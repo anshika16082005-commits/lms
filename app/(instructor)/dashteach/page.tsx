@@ -1,28 +1,58 @@
 "use client";
 
 import { Users, BookOpen, Star, TrendingUp, PlusCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function InstructorDashboard() {
-  const courses = [
-    {
-      title: "React Bootcamp",
-      students: 850,
-      rating: 4.8,
-      updated: "2 days ago",
-    },
-    {
-      title: "Node.js Mastery",
-      students: 620,
-      rating: 4.7,
-      updated: "1 week ago",
-    },
-    {
-      title: "MongoDB Basics",
-      students: 420,
-      rating: 4.6,
-      updated: "3 weeks ago",
-    },
-  ];
+  type Course = {
+    _id?: string;
+    title: string;
+    description: string;
+    enrolledStudents: string[];
+    price: number;
+    rating: number;
+    isPublished: boolean;
+    thumbnail?: string;
+    level: "Beginner" | "Intermediate" | "Advanced";
+    duration: string;
+    category: string;
+    updatedAt?: string;
+  };
+  const [courses, setCourses] = useState<Course[]>([]);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/mycourses");
+        const { data } = await response.json();
+        setCourses(data);
+        console.log("Courses:", data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  // const courses = [
+  //   {
+  //     title: "React Bootcamp",
+  //     students: 850,
+  //     rating: 4.8,
+  //     updated: "2 days ago",
+  //   },
+  //   {
+  //     title: "Node.js Mastery",
+  //     students: 620,
+  //     rating: 4.7,
+  //     updated: "1 week ago",
+  //   },
+  //   {
+  //     title: "MongoDB Basics",
+  //     students: 420,
+  //     rating: 4.6,
+  //     updated: "3 weeks ago",
+  //   },
+  // ];
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -56,7 +86,12 @@ export default function InstructorDashboard() {
 
             <div>
               <p className="text-gray-500 text-sm">Total Students</p>
-              <h2 className="text-2xl font-bold">3,240</h2>
+              <h2 className="text-2xl font-bold">
+                {courses.reduce(
+                  (total, course) => total + course.enrolledStudents.length,
+                  0,
+                ) || 0}
+              </h2>
               <p className="text-green-600 text-xs">+12% this month</p>
             </div>
           </div>
@@ -68,7 +103,7 @@ export default function InstructorDashboard() {
 
             <div>
               <p className="text-gray-500 text-sm">Courses</p>
-              <h2 className="text-2xl font-bold">12</h2>
+              <h2 className="text-2xl font-bold">{courses.length}</h2>
               <p className="text-gray-400 text-xs">Active courses</p>
             </div>
           </div>
@@ -80,7 +115,14 @@ export default function InstructorDashboard() {
 
             <div>
               <p className="text-gray-500 text-sm">Average Rating</p>
-              <h2 className="text-2xl font-bold">4.8</h2>
+              <h2 className="text-2xl font-bold">
+                {courses.length > 0
+                  ? (
+                      courses.reduce((sum, course) => sum + course.rating, 0) /
+                      courses.length
+                    ).toFixed(1)
+                  : 0}
+              </h2>
               <p className="text-gray-400 text-xs">Across all courses</p>
             </div>
           </div>
@@ -116,7 +158,7 @@ export default function InstructorDashboard() {
                     <p className="font-medium text-gray-800">{course.title}</p>
 
                     <p className="text-sm text-gray-500">
-                      {course.students} students
+                      {course.enrolledStudents.length || 0} students
                     </p>
                   </div>
 
@@ -124,7 +166,7 @@ export default function InstructorDashboard() {
                     <p className="text-sm">⭐ {course.rating}</p>
 
                     <p className="text-xs text-gray-400">
-                      Updated {course.updated}
+                      Updated {course.updatedAt?.split("T")[0] || "N/A"}
                     </p>
                   </div>
                 </div>

@@ -33,7 +33,7 @@ export default function TeacherLayout({
       icon: PlusCircle,
     },
     { name: "My Courses", href: "/my-courses", icon: BookOpen },
-    { name: "Students", href: "/students", icon: Users },
+    { name: "Students", href: "/student", icon: Users },
     { name: "Earnings", href: "/earnings", icon: Wallet },
     { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: "Profile", href: "/teacherProfile", icon: User },
@@ -112,7 +112,7 @@ export default function TeacherLayout({
       <motion.main
         animate={{ marginLeft: collapsed ? 80 : 256 }}
         transition={{ type: "spring", stiffness: 260, damping: 25 }}
-        className=" min-h-screen bg-gray-50 p-6"
+        className=" min-h-screen bg-gray-800 p-6"
       >
         {children}
       </motion.main>

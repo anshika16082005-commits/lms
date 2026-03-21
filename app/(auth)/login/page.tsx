@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../../context/AuthContext";
 import { LogIn, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 const LoginTest = () => {
   const router = useRouter();
-
+  const { login } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -100,7 +101,7 @@ const LoginTest = () => {
         });
         return;
       }
-
+      login();
       if (data?.user?.role === "admin") {
         router.push("/admin/dashboard");
       }

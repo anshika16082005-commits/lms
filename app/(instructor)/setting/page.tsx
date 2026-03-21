@@ -137,6 +137,8 @@ export default function InstructorSettings() {
 
               <input
                 type="number"
+                min={0}
+                max={10}
                 name="experience"
                 onChange={handleChange}
                 className="w-full border rounded-lg p-3"

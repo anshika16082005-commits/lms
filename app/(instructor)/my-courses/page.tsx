@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Users, IndianRupee } from "lucide-react";
+import { BookOpen, Users, IndianRupee, Plus } from "lucide-react";
 
 type Course = {
-  _id?: number;
+  _id?: string;
   title: string;
   description: string;
   enrolledStudents: string[];
@@ -20,6 +20,20 @@ type Course = {
 export default function MyCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
+  const deleteCourse = async (courseId: string) => {
+    try {
+      const res = await fetch(`/api/mycourses?courseId=${courseId}`, {
+        method: "DELETE",
+      });
+      const { message } = await res.json();
+      alert(message);
+
+      console.log(message);
+      setCourses(courses.filter((course) => course._id !== courseId));
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -30,8 +44,8 @@ export default function MyCoursesPage() {
             "Content-Type": "application/json",
           },
         });
-        const { allcourses } = await res.json();
-        setCourses(allcourses);
+        const { data } = await res.json();
+        setCourses(data);
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
@@ -128,12 +142,21 @@ export default function MyCoursesPage() {
                   >
                     {course.isPublished ? "Published" : "Draft"}
                   </span>
-                  <Link
-                    href={`/my-courses/manage/${course._id}`}
-                    className="text-blue-600 text-sm font-medium hover:underline"
-                  >
-                    Manage
-                  </Link>
+
+                  <span className="flex items-center gap-1">
+                    <Link
+                      href={`/my-courses/manage/?courseId=${course._id}`}
+                      className="flex items-center bg-blue-600 text-sm hover:bg-blue-700 transition text-white px-2 py-1 rounded-md shadow-sm font-semibold"
+                    >
+                      Manage
+                    </Link>
+                    <button
+                      onClick={() => deleteCourse(course._id!)}
+                      className="flex items-center bg-red-600 text-sm hover:bg-red-700 transition text-white px-2 py-1 rounded-md shadow-sm font-semibold"
+                    >
+                      Delete
+                    </button>
+                  </span>
                 </div>
               </div>
             </div>
