@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { Menu, X } from "lucide-react"; // lightweight icons
@@ -20,7 +20,7 @@ export default function NavBar() {
     logout();
   };
 
-  // Placeholder for auth state
+  useEffect(() => {}, [isLoggedIn]);
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-gray-900 shadow-lg">
@@ -62,7 +62,7 @@ export default function NavBar() {
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  href="/Contact"
                   className="hover:text-emerald-400 active:text-emerald-500 transition-colors duration-200"
                 >
                   Contact
@@ -127,7 +127,7 @@ export default function NavBar() {
             Services
           </Link>
           <Link
-            href="/contact"
+            href="/Contact"
             className="block text-gray-300 hover:text-emerald-400 transition-colors duration-200"
           >
             Contact

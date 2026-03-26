@@ -33,5 +33,8 @@ export const config = {
     "/createcourse",
     "/api/course/createCourse",
     "/api/mycourses",
+    "/admin/dashboard",
+    "/teacherProfile",
+    "/profile",
   ],
 };

@@ -58,7 +58,7 @@ export default function InstructorProfile() {
   }, []);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50 min-h-screen p-6">
       {/* Banner */}
       <div className="h-60 bg-linear-to-r from-indigo-600 to-purple-600"></div>
 
@@ -139,14 +139,6 @@ export default function InstructorProfile() {
               <p className="text-gray-500 text-sm">
                 {instructor.createdCourses?.length === 1 ? "Course" : "Courses"}
               </p>
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
-            <Users className="text-indigo-600" size={28} />
-            <div>
-              <h3 className="text-xl font-bold">{}</h3>
-              <p className="text-gray-500 text-sm">Students</p>
             </div>
           </div>
 

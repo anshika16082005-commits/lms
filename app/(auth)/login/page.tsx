@@ -11,12 +11,14 @@ const LoginTest = () => {
   const { login } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [role, setRole] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
   const [errors, setErrors] = useState<{
     email?: string;
     password?: string;
+    role?: string;
     apiError?: string;
   }>({});
 
@@ -90,7 +92,7 @@ const LoginTest = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, role }),
       });
 
       const data = await res.json();
@@ -102,10 +104,9 @@ const LoginTest = () => {
         return;
       }
       login();
-      if (data?.user?.role === "admin") {
+      if (data.user.role === "admin") {
         router.push("/admin/dashboard");
-      }
-      if (data.user.role === "instructor") {
+      } else if (data.user.role === "instructor") {
         router.push("/teacherProfile");
       } else {
         router.push("/profile");
@@ -145,6 +146,28 @@ const LoginTest = () => {
             />
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
+
+          {/* Role */}
+          <div className="mb-5">
+            <label className="block text-sm font-semibold mb-2">Role</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition ${
+                errors.role
+                  ? "border-red-500 focus:ring-2 focus:ring-red-300"
+                  : "border-gray-300 focus:ring-2 focus:ring-blue-300"
+              }`}
+            >
+              <option value="">Select Role</option>
+              <option value="student">Student</option>
+              <option value="instructor">Instructor</option>
+              <option value="admin">Admin</option>
+            </select>
+            {errors.role && (
+              <p className="text-red-500 text-sm mt-1">{errors.role}</p>
             )}
           </div>
 

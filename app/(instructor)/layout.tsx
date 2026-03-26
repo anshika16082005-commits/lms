@@ -112,7 +112,7 @@ export default function TeacherLayout({
       <motion.main
         animate={{ marginLeft: collapsed ? 80 : 256 }}
         transition={{ type: "spring", stiffness: 260, damping: 25 }}
-        className=" min-h-screen bg-gray-800 p-6"
+        className=" min-h-screen p-6"
       >
         {children}
       </motion.main>
