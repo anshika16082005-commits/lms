@@ -33,7 +33,7 @@ export default function RootLayout({
         <AuthProvider>
           <NavBar />
           {children}
-          <Toaster position="top-right" reverseOrder={false} gutter={5000} />
+          <Toaster position="top-right" reverseOrder={false} gutter={7000} />
         </AuthProvider>
       </body>
     </html>

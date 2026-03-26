@@ -78,7 +78,7 @@ export default function InstructorProfile() {
             {/* Instructor Info */}
             <div className="flex-1">
               <h1 className="text-3xl font-bold text-gray-800">
-                {instructor.name}
+                {instructor.name.toUpperCase()}
               </h1>
 
               <p className="text-gray-500 mt-1">
