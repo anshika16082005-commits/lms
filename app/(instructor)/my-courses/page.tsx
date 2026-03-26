@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BookOpen, Users, IndianRupee, Plus } from "lucide-react";
+import toast from "react-hot-toast";
 
 type Course = {
   _id?: string;
@@ -26,12 +27,12 @@ export default function MyCoursesPage() {
         method: "DELETE",
       });
       const { message } = await res.json();
-      alert(message);
+      toast.success(message);
 
       console.log(message);
       setCourses(courses.filter((course) => course._id !== courseId));
     } catch (error) {
-      console.error("Error deleting course:", error);
+      toast.error("Error deleting course:");
     }
   };
 

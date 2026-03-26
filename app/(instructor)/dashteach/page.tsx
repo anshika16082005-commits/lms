@@ -33,27 +33,6 @@ export default function InstructorDashboard() {
     fetchCourses();
   }, []);
 
-  // const courses = [
-  //   {
-  //     title: "React Bootcamp",
-  //     students: 850,
-  //     rating: 4.8,
-  //     updated: "2 days ago",
-  //   },
-  //   {
-  //     title: "Node.js Mastery",
-  //     students: 620,
-  //     rating: 4.7,
-  //     updated: "1 week ago",
-  //   },
-  //   {
-  //     title: "MongoDB Basics",
-  //     students: 420,
-  //     rating: 4.6,
-  //     updated: "3 weeks ago",
-  //   },
-  // ];
-
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
@@ -134,8 +113,8 @@ export default function InstructorDashboard() {
 
             <div>
               <p className="text-gray-500 text-sm">Completion Rate</p>
-              <h2 className="text-2xl font-bold">78%</h2>
-              <p className="text-green-600 text-xs">+5% improvement</p>
+              <h2 className="text-2xl font-bold">{0}%</h2>
+              <p className="text-green-600 text-xs">{"+5% improvement"}</p>
             </div>
           </div>
         </div>

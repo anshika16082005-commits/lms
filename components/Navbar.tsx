@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { Menu, X } from "lucide-react"; // lightweight icons
+import { toast } from "react-hot-toast/headless";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +15,7 @@ export default function NavBar() {
     if (!confirmLogout) return;
     const response = await fetch("/api/users/logout", { method: "GET" });
     if (!response.ok) {
-      alert("Logout failed. Please try again.");
+      toast.error("Logout failed. Please try again.");
       return;
     }
     logout();

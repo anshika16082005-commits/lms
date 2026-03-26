@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 type Course = {
   title: string;
@@ -92,15 +93,17 @@ const CreateCoursePage = () => {
     });
 
     if (res.ok) {
-      alert("Course Created Successfully!");
+      toast.success("Course Created Successfully!", {
+        className: "bg-green-600 text-white",
+      });
       router.push("/my-courses");
     } else {
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <div className="text-white min-h-screen px-10 py-8">
+    <div className="text-black min-h-screen px-10 py-8">
       {/* Page Title */}
       <div className="mb-10">
         <h1 className="text-3xl font-semibold ">Create New Course</h1>
@@ -123,7 +126,7 @@ const CreateCoursePage = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full border rounded-md p-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border-2 border-gray-500 text-black rounded-md p-3   focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.title && (
               <p className="text-red-500 text-sm mt-1">{errors.title}</p>
@@ -146,7 +149,7 @@ const CreateCoursePage = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full border rounded-md p-3 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border-2 border-gray-500 text-black rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.description && (
               <p className="text-red-500 text-sm mt-1">{errors.description}</p>
@@ -166,7 +169,7 @@ const CreateCoursePage = () => {
               name="level"
               value={formData.level}
               onChange={handleChange}
-              className="w-full border bg-gray-700 text-white rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border-2 border-gray-500 text-black rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="Beginner">Beginner</option>
               <option value="Intermediate">Intermediate</option>
@@ -189,7 +192,7 @@ const CreateCoursePage = () => {
               placeholder="e.g. 8 weeks"
               value={formData.duration}
               onChange={handleChange}
-              className="w-full bg-gray-700 text-white border rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border-2 border-gray-500 text-black rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.duration && (
               <p className="text-red-500 text-sm mt-1">{errors.duration}</p>
@@ -210,7 +213,7 @@ const CreateCoursePage = () => {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="w-full border bg-gray-700 text-white rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border-2 border-gray-500 text-black rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.category && (
               <p className="text-red-500 text-sm mt-1">{errors.category}</p>
@@ -232,7 +235,7 @@ const CreateCoursePage = () => {
               type="file"
               accept="image/*"
               onChange={handleThumbnailChange}
-              className="w-full border bg-gray-700 text-white rounded-md p-3"
+              className="w-full border-2 border-gray-500 text-black rounded-md p-3"
             />
             {thumbnail && (
               <p className="text-sm text-green-600 mt-2">
