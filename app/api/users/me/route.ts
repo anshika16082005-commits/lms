@@ -16,7 +16,6 @@ export async function PATCH(request: NextRequest) {
     const userId = await getDataFromToken(request);
     const body = await request.json();
 
-    // Build update object dynamically
     const updateFields: Record<string, any> = {};
     if (body.name !== undefined) updateFields.name = body.name;
     if (body.email !== undefined) updateFields.email = body.email;
