@@ -8,7 +8,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import Dashboard from "../Dashboard"; // your users table component
+import Dashboard from "../layout"; // your users table component
 
 export default function AdminDashboard() {
   // collapsed = true → sidebar shrinks
@@ -20,51 +20,6 @@ export default function AdminDashboard() {
   return (
     <div className="flex h-screen bg-gray-100">
       {/* Sidebar */}
-      <aside
-        className={`bg-gray-900 text-gray-200 transition-all duration-300 ease-in-out
-          ${collapsed ? "w-20" : "w-64"} flex flex-col`}
-      >
-        {/* Sidebar Header */}
-        <div className="flex items-center justify-between px-4 h-16 border-b border-gray-700">
-          {!collapsed && (
-            <span className="text-emerald-400 font-bold text-xl">Admin</span>
-          )}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="text-gray-400 hover:text-white"
-          >
-            {collapsed ? <ChevronRight size={22} /> : <ChevronLeft size={22} />}
-          </button>
-        </div>
-
-        {/* Navigation */}
-        <nav className="mt-6 space-y-2 flex-1">
-          <button
-            onClick={() => setSelectedPage("overview")}
-            className={`flex items-center px-4 py-2 rounded transition w-full
-              ${selectedPage === "overview" ? "bg-gray-800 text-emerald-400" : "hover:bg-gray-800"}`}
-          >
-            <BarChart3 className="h-5 w-5" />
-            {!collapsed && <span className="ml-3">Overview</span>}
-          </button>
-          <button
-            onClick={() => setSelectedPage("users")}
-            className={`flex items-center px-4 py-2 rounded transition w-full
-              ${selectedPage === "users" ? "bg-gray-800 text-emerald-400" : "hover:bg-gray-800"}`}
-          >
-            <Users className="h-5 w-5" />
-            {!collapsed && <span className="ml-3">Users</span>}
-          </button>
-          <button
-            onClick={() => setSelectedPage("settings")}
-            className={`flex items-center px-4 py-2 rounded transition w-full
-              ${selectedPage === "settings" ? "bg-gray-800 text-emerald-400" : "hover:bg-gray-800"}`}
-          >
-            <Settings className="h-5 w-5" />
-            {!collapsed && <span className="ml-3">Settings</span>}
-          </button>
-        </nav>
-      </aside>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
@@ -97,7 +52,7 @@ export default function AdminDashboard() {
             </div>
           )}
 
-          {selectedPage === "users" && <Dashboard />}
+          {/* {selectedPage === "users" && < />} */}
           {selectedPage === "settings" && (
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-lg font-semibold text-gray-800">Settings</h2>
