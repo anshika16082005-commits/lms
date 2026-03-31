@@ -1,6 +1,7 @@
 "use client";
 
 import { BookOpen, Clock, BarChart3 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Course = {
@@ -11,68 +12,6 @@ type Course = {
   duration: string;
   category: string;
 };
-
-// const courses: Course[] = [
-//   {
-//     id: 1,
-//     title: "Data Structures & Algorithms",
-//     description:
-//       "Arrays, linked lists, trees, graphs, and problem-solving techniques.",
-//     level: "Intermediate",
-//     duration: "12 weeks",
-//     progress: 65,
-//     category: "Core CS",
-//   },
-//   {
-//     id: 2,
-//     title: "Operating Systems",
-//     description: "Processes, threads, scheduling, memory, and file systems.",
-//     level: "Advanced",
-//     duration: "10 weeks",
-//     progress: 30,
-//     category: "Systems",
-//   },
-//   {
-//     id: 3,
-//     title: "Web Development with Next.js",
-//     description:
-//       "Build full-stack applications using React, Next.js, and APIs.",
-//     level: "Beginner",
-//     duration: "8 weeks",
-//     progress: 90,
-//     category: "Web",
-//   },
-//   {
-//     id: 4,
-//     title: "Database Systems",
-//     description:
-//       "Relational models, SQL, indexing, and transaction management.",
-//     level: "Intermediate",
-//     duration: "9 weeks",
-//     progress: 40,
-//     category: "Core CS",
-//   },
-//   {
-//     id: 5,
-//     title: "Computer Networks",
-//     description:
-//       "TCP/IP, routing, congestion control, and network security basics.",
-//     level: "Intermediate",
-//     duration: "8 weeks",
-//     progress: 20,
-//     category: "Systems",
-//   },
-//   {
-//     id: 6,
-//     title: "Introduction to Machine Learning",
-//     description: "Supervised learning, neural networks, and model evaluation.",
-//     level: "Advanced",
-//     duration: "11 weeks",
-//     progress: 10,
-//     category: "AI",
-//   },
-// ];
-
 export default function Page() {
   const [courses, setCourses] = useState<Course[]>([]);
   const progress = 10;
@@ -170,10 +109,12 @@ export default function Page() {
                 </div>
               </div> */}
 
-              <button className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition px-4 py-2 font-medium">
-                <BookOpen size={18} />
-                Enroll
-              </button>
+              <Link href={`/courseplay`}>
+                <button className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition px-4 py-2 font-medium">
+                  <BookOpen size={18} />
+                  Enroll
+                </button>
+              </Link>
             </div>
           ))}
         </div>

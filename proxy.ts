@@ -36,5 +36,6 @@ export const config = {
     "/admin/dashboard",
     "/teacherProfile",
     "/profile",
+    "/courseplay",
   ],
 };

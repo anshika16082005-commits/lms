@@ -8,24 +8,44 @@ connect();
 
 export async function GET(request: NextRequest) {
   try {
-    const instructor = request.headers.get("x-user-id");
-    const allcourses = await Course.find({ instructor });
-    if (!allcourses) {
-      return NextResponse.json({ error: "No course found" }, { status: 400 });
-    }
+    const userId = request.headers.get("x-user-id");
 
-    const response = NextResponse.json({
-      message: "Got all courses",
-      success: true,
-      data: allcourses,
-    });
-    return response;
+    console.log(typeof userId, "User ID from header:", userId);
+    const user = await User.findById({ _id: userId });
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    if (user.role === "student") {
+      const enrolledCourses = await Course.find({
+        enrolledStudents: userId,
+      });
+      console.log("Enrolled Courses:", enrolledCourses);
+      return NextResponse.json({
+        message: "Got enrolled courses",
+        success: true,
+        data: enrolledCourses,
+      });
+    }
+    if (user.role === "instructor") {
+      const allCreatedCourses = await Course.find({ instructor: userId });
+      if (!allCreatedCourses) {
+        return NextResponse.json({ error: "No course found" }, { status: 400 });
+      }
+
+      const response = NextResponse.json({
+        message: "Got all created courses",
+        success: true,
+        data: allCreatedCourses,
+      });
+      return response;
+    }
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 export async function DELETE(request: NextRequest) {
   try {
+    //TODO: Delete the course and remove the course from the user's enrolled courses list.
     const courseId = request.nextUrl.searchParams.get("courseId");
     if (!courseId) {
       return NextResponse.json(

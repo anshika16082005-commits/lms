@@ -3,7 +3,16 @@ import mongoose from "mongoose";
 const lessonSchema = new mongoose.Schema({
   title: String,
   description: String,
-  videoUrl: String,
+  url: String,
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+  type: {
+    type: String,
+    enum: ["video", "quiz", "assignment"],
+    default: "video",
+  },
   duration: Number,
   isPreview: {
     type: Boolean,

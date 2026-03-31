@@ -18,7 +18,6 @@ export async function PATCH(request: NextRequest) {
     if (!course) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
-
     const { modules } = await request.json();
     if (!modules) {
       return NextResponse.json(
@@ -27,59 +26,27 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    //TODO: Update the course with the new module and lessons using array filters to target the specific module and lesson to update. If the module or lesson does not exist, it will be added to the course.
     const updateCourse = await Course.updateOne(
-      { _id: courseId },
+      { _id: courseId, "modules._id": modules._id },
       {
         $set: {
           "modules.$.title": modules.title || "No module title",
           "modules.$.description":
             modules.description || "No module description",
-          "modules.$[mod].lessons.$[lesson]": [
-            {
-              title: modules.lessons.title || "No lesson title",
-              description:
-                modules.lessons.description || "No lesson description",
-              url: modules.lessons.url || "No URL",
-              type: modules.lessons.type || "video",
-              isPreview: modules.lessons.isPreview || false,
-            },
-          ],
-          arrayfilters: [
-            { "mod._id": modules._id },
-            { "lesson._id": modules.lessons._id },
-          ],
         },
       },
-      { upsert: true },
+      {
+        arrayFilters: [{ "mod._id": modules._id }],
+      },
     );
-
-    return NextResponse.json({
-      message: "Module added successfully",
-      data: updateCourse,
-      status: 200,
-    });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-}
-
-export async function GET(request: NextRequest) {
-  try {
-    const courseId = request.nextUrl.searchParams.get("courseId");
-    if (!courseId) {
+    if (!updateCourse) {
       return NextResponse.json(
-        { error: "Course ID is required" },
-        { status: 400 },
+        { error: "Failed to update course" },
+        { status: 500 },
       );
     }
-    const course = await Course.findById(courseId).populate(
-      "instructor",
-      "name email",
-    );
     return NextResponse.json({
-      message: "Course details fetched successfully",
-      data: course,
+      message: "Module updated successfully",
       status: 200,
     });
   } catch (error: any) {
@@ -87,7 +54,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function PUT(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const courseId = request.nextUrl.searchParams.get("courseId");
     if (!courseId) {
@@ -100,25 +67,28 @@ export async function PUT(request: NextRequest) {
     if (!course) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
-    const body = await request.json();
-    const { modules } = body;
+    const { modules } = await request.json();
     if (!modules) {
       return NextResponse.json(
         { error: "Modules are required" },
         { status: 400 },
       );
     }
-
     const updateCourse = await Course.findByIdAndUpdate(
-      { _id: courseId, "modules._id": modules._id },
+      { _id: courseId },
       {
         $push: {
           modules: modules,
-          "modules.$.lessons": modules.lessons,
         },
       },
       { new: true },
     );
+    if (!updateCourse) {
+      return NextResponse.json(
+        { error: "Failed to update course" },
+        { status: 500 },
+      );
+    }
     return NextResponse.json({
       message: "Module added successfully",
       data: updateCourse,
