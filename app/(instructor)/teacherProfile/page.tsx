@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, Linkedin, Globe, BookOpen, Users, Star } from "lucide-react";
+import { Github, Linkedin, Globe, BookOpen, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function InstructorProfile() {
@@ -28,6 +28,7 @@ export default function InstructorProfile() {
           },
         });
         const { data } = await res.json();
+        console.log("Instructor Data:", data);
         setInstructor({
           name: data.name ? data.name : "John Doe",
           profileImage: data.profileImage
@@ -158,9 +159,9 @@ export default function InstructorProfile() {
           </h2>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((course) => (
+            {instructor.createdCourses?.map((course: any) => (
               <div
-                key={course}
+                key={course._id}
                 className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden"
               >
                 <div className="h-40">
@@ -173,16 +174,17 @@ export default function InstructorProfile() {
 
                 <div className="p-4 mt-2">
                   <h3 className="font-semibold text-gray-800">
-                    Full Stack Web Development
+                    {course.title}
                   </h3>
 
                   <p className="text-sm text-gray-500 mt-1">
-                    Beginner to Advanced
+                    {course.level || "Beginner"} |{" "}
+                    {course.category || "General"}
                   </p>
 
                   <div className="flex justify-between mt-3 text-sm text-gray-600">
-                    <span>1200 Students</span>
-                    <span>⭐ 4.7</span>
+                    <span>{course.enrolledStudents?.length || 0} Students</span>
+                    <span>⭐ {course.rating || 0}</span>
                   </div>
                 </div>
               </div>

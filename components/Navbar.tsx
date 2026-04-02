@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { useAuth } from "@/context/AuthContext";
 import { Menu, X } from "lucide-react"; // lightweight icons
 import { toast } from "react-hot-toast/headless";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoggedIn, logout } = useAuth();
+  const { isLoggedIn, logout, login } = useAuth();
 
   const logoutHandler = async () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
@@ -18,10 +19,9 @@ export default function NavBar() {
       toast.error("Logout failed. Please try again.");
       return;
     }
+    toast.success("Logged out successfully!");
     logout();
   };
-
-  useEffect(() => {}, [isLoggedIn]);
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-gray-900 shadow-lg">

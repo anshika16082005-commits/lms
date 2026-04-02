@@ -77,16 +77,6 @@ const LoginTest = () => {
       setLoading(true);
       setErrors({});
 
-      // const { data } = await axios.post(
-      //       "/api/auth/signin",
-
-      //       { email, password },
-      //       {
-      //         headers: { "Content-Type": "application/json" },
-      //         withCredentials: true,
-      //       }
-      //     );
-
       const res = await fetch("/api/users/login", {
         method: "POST",
         headers: {

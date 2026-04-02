@@ -1,6 +1,7 @@
 "use client";
 
 import { Users, BookOpen, Star, TrendingUp, PlusCircle } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function InstructorDashboard() {
@@ -159,21 +160,29 @@ export default function InstructorDashboard() {
             <h2 className="text-lg font-semibold mb-6">Quick Actions</h2>
 
             <div className="grid grid-cols-2 gap-4">
-              <button className="bg-indigo-50 text-indigo-700 p-4 rounded-lg hover:bg-indigo-100 transition text-sm font-medium">
-                Create New Course
-              </button>
+              <Link href="/createcourse">
+                <button className="bg-indigo-50 text-indigo-700 p-4 rounded-lg w-full hover:bg-indigo-100 transition text-sm font-medium">
+                  Create New Course
+                </button>
+              </Link>
 
-              <button className="bg-green-50 text-green-700 p-4 rounded-lg hover:bg-green-100 transition text-sm font-medium">
-                Manage Courses
-              </button>
+              <Link href="/my-courses">
+                <button className="bg-green-50 w-full text-green-700 p-4 rounded-lg hover:bg-green-100 transition text-sm font-medium">
+                  Manage Courses
+                </button>
+              </Link>
 
-              <button className="bg-yellow-50 text-yellow-700 p-4 rounded-lg hover:bg-yellow-100 transition text-sm font-medium">
-                View Analytics
-              </button>
+              <Link href="/analytics">
+                <button className="bg-yellow-50 w-full text-yellow-700 p-4 rounded-lg hover:bg-yellow-100 transition text-sm font-medium">
+                  View Analytics
+                </button>
+              </Link>
 
-              <button className="bg-purple-50 text-purple-700 p-4 rounded-lg hover:bg-purple-100 transition text-sm font-medium">
-                Edit Profile
-              </button>
+              <Link href="/teacherProfile">
+                <button className="bg-purple-50 w-full text-purple-700 p-4 rounded-lg hover:bg-purple-100 transition text-sm font-medium">
+                  Edit Profile
+                </button>
+              </Link>
             </div>
           </div>
         </div>
