@@ -104,6 +104,7 @@ export default function HomePage() {
       <FeaturedCourses />
       {/* READY TO START LEARNING */}
       <ReadyToStartLearning />
+
       {/* FOOTER */}
       <Footer />
     </main>

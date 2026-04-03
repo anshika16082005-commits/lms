@@ -12,7 +12,10 @@ type Course = {
   enrolledStudents: string[];
   price: number;
   isPublished: boolean;
-  thumbnail?: string;
+  thumbnail: {
+    url: string;
+    public_id: string;
+  };
   level: "Beginner" | "Intermediate" | "Advanced";
   duration: string;
   category: string;
@@ -103,7 +106,9 @@ export default function MyCoursesPage() {
               {/* Thumbnail */}
               <div className="h-40 bg-gray-200">
                 <img
-                  src={course.thumbnail || "/images/softwaredevelopment.jpg"}
+                  src={
+                    course.thumbnail?.url || "/images/softwaredevelopment.jpg"
+                  }
                   alt={course.title}
                   className="w-full h-full object-cover"
                 />

@@ -56,6 +56,17 @@ const CreateCoursePage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const convertToBase64 = (file: File) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -66,7 +77,7 @@ const CreateCoursePage = () => {
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setThumbnail(e.target.files[0]);
+      setThumbnail(e.target.files?.[0]);
     }
   };
 
@@ -82,7 +93,7 @@ const CreateCoursePage = () => {
     formPayload.append("level", formData.level);
     formPayload.append("duration", formData.duration);
     formPayload.append("category", formData.category);
-
+    //TODO : change the thumbnail event handler
     if (thumbnail) {
       formPayload.append("thumbnail", thumbnail);
     }

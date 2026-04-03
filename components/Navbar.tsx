@@ -9,8 +9,9 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoggedIn, logout, login } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
 
+  const router = useRouter();
   const logoutHandler = async () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     if (!confirmLogout) return;
@@ -93,6 +94,15 @@ export default function NavBar() {
               </Link>
             )}
             {/* <AvatarMenu /> */}
+            <button
+              className="px-4 py-2 rounded-md bg-emerald-500 text-white font-semibold 
+                         hover:bg-emerald-600 
+                         active:bg-emerald-700 
+                         transition duration-200"
+              onClick={() => router.push("/Editor")}
+            >
+              Editor
+            </button>
           </div>
 
           {/* Mobile Menu Button */}

@@ -33,7 +33,10 @@ const courseSchema = new mongoose.Schema(
       required: true,
     },
     description: String,
-    thumbnail: String,
+    thumbnail: {
+      url: String,
+      public_id: String,
+    },
     price: {
       type: Number,
       default: 0,

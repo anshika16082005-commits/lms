@@ -1,4 +1,6 @@
 import { connect } from "@/dbConfig/dbConfig";
+import bufferToStream from "@/helpers/bufferToStream";
+import cloudinary from "@/lib/cloudinary";
 import Course from "@/models/courseModel";
 import User from "@/models/users";
 import { NextResponse } from "next/server";
@@ -7,7 +9,20 @@ import type { NextRequest } from "next/server";
 connect();
 export async function POST(request: NextRequest) {
   try {
-    const instructor = request.headers.get("x-user-id");
+    const userId = request.headers.get("x-user-id");
+    const user = await User.findById(userId);
+    if (!user) {
+      return NextResponse.json(
+        { message: "User does not exist" },
+        { status: 404 },
+      );
+    }
+    if (user.role !== "instructor") {
+      return NextResponse.json(
+        { message: "Only instructors are allowed" },
+        { status: 401 },
+      );
+    }
     const formData = await request.formData();
 
     const title = formData.get("title") as string;
@@ -17,7 +32,11 @@ export async function POST(request: NextRequest) {
     const category = formData.get("category") as string;
     const thumbnail = formData.get("thumbnail") as File | null;
 
-    const duplicate = await Course.findOne({ title, instructor });
+    const duplicate = await Course.findOne({
+      title,
+      description,
+      instructor: userId,
+    });
     if (duplicate) {
       return NextResponse.json(
         { error: "Course already exists" },
@@ -25,30 +44,53 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const newCourse = new Course({
-      title,
-      description,
-      category,
-      level,
-      instructor,
-      duration,
-      thumbnail,
-    });
+    const arrayBuffer = await thumbnail?.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer!);
 
-    const savedCourse = await newCourse.save();
-    await User.findByIdAndUpdate(instructor, {
-      $push: {
-        createdCourses: savedCourse._id,
-      },
-    });
+    return new Promise((resolve) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "lms-assets/images",
+        },
+        async (error, result) => {
+          if (error || !result) {
+            resolve(NextResponse.json({ error }, { status: 500 }));
+            return;
+          }
 
-    const response = NextResponse.json({
-      message: "New Course created successfully",
-      success: true,
-      status: 201,
-      savedCourse,
+          const newCourse = new Course({
+            title,
+            description,
+            category,
+            level,
+            instructor: userId,
+            duration,
+            thumbnail: {
+              url: result.secure_url,
+              public_id: result.public_id,
+            },
+          });
+
+          const savedCourse = await newCourse.save();
+          await User.findByIdAndUpdate(userId, {
+            $push: {
+              createdCourses: savedCourse._id,
+            },
+          });
+
+          resolve(
+            NextResponse.json({
+              message: "New Course created successfully",
+              success: true,
+              status: 201,
+              savedCourse,
+            }),
+          );
+          return;
+        },
+      );
+      bufferToStream(buffer).pipe(uploadStream);
     });
-    return response;
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
