@@ -93,7 +93,7 @@ const CreateCoursePage = () => {
     formPayload.append("level", formData.level);
     formPayload.append("duration", formData.duration);
     formPayload.append("category", formData.category);
-    //TODO : change the thumbnail event handler
+
     if (thumbnail) {
       formPayload.append("thumbnail", thumbnail);
     }

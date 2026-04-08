@@ -14,7 +14,6 @@ type Course = {
   isPublished: boolean;
   thumbnail: {
     url: string;
-    public_id: string;
   };
   level: "Beginner" | "Intermediate" | "Advanced";
   duration: string;

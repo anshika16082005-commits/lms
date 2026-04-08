@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 connect();
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest): Promise<Response> {
   try {
     const userId = request.headers.get("x-user-id");
     const user = await User.findById(userId);
@@ -86,7 +86,6 @@ export async function POST(request: NextRequest) {
               savedCourse,
             }),
           );
-          return;
         },
       );
       bufferToStream(buffer).pipe(uploadStream);

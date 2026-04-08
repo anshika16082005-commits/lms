@@ -1,211 +1,154 @@
 "use client";
 
-import { useState } from "react";
+import { User, Lock, Bell, Shield, BarChart3, DollarSign } from "lucide-react";
 
-export default function InstructorSettings() {
-  const [formData, setFormData] = useState({
-    name: "",
-    bio: "",
-    experience: "",
-    expertise: "",
-    linkedin: "",
-    github: "",
-    website: "",
-  });
-
-  const [profileImage, setProfileImage] = useState(
-    "https://via.placeholder.com/150",
-  );
-
-  const [tempImage, setTempImage] = useState<string | null>(null);
-
-  const handleChange = (e: any) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleImageChange = (e: any) => {
-    const file = e.target.files[0];
-
-    if (file) {
-      const preview = URL.createObjectURL(file);
-      setTempImage(preview);
-    }
-  };
-
-  const saveImage = () => {
-    if (tempImage) {
-      setProfileImage(tempImage);
-      setTempImage(null);
-    }
-  };
-
-  const discardImage = () => {
-    setTempImage(null);
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
+export default function Page() {
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
-        {/* Profile Preview */}
-        <div className="bg-white rounded-2xl shadow p-6 text-center h-fit">
-          <img
-            src={tempImage || profileImage}
-            className="w-32 h-32 rounded-full object-cover mx-auto"
-          />
+    <div className="flex min-h-screen bg-slate-100 text-slate-900">
+      {/* Main Content */}
+      <main className="flex-1 px-8 py-8">
+        {/* Header */}
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold">Instructor Settings</h1>
+            <p className="text-slate-600 mt-1">
+              Manage your teaching profile, earnings and preferences
+            </p>
+          </div>
 
-          <h2 className="mt-4 font-semibold text-lg">
-            {formData.name || "Instructor Name"}
-          </h2>
-
-          <p className="text-gray-500 text-sm">
-            {formData.expertise || "Your Expertise"}
-          </p>
+          <button className="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-500">
+            + Create Course
+          </button>
         </div>
 
-        {/* Settings Form */}
-        <div className="md:col-span-2 bg-white rounded-2xl shadow p-8">
-          <h1 className="text-2xl font-bold mb-6">Instructor Settings</h1>
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Profile Image */}
-            <div>
-              <label className="block font-medium mb-2">Profile Image</label>
-
-              <input
-                type="file"
-                onChange={handleImageChange}
-                className="border p-2 rounded-lg w-full"
-              />
-
-              {tempImage && (
-                <div className="flex gap-3 mt-3">
-                  <button
-                    type="button"
-                    onClick={saveImage}
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-lg"
-                  >
-                    Save Image
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={discardImage}
-                    className="border px-4 py-2 rounded-lg"
-                  >
-                    Discard
-                  </button>
-                </div>
-              )}
+        {/* Sections */}
+        <div className="space-y-8 max-w-5xl">
+          {/* Instructor Profile */}
+          <section className="bg-white rounded-xl border p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <User className="text-indigo-600" />
+              <h2 className="text-xl font-semibold">Instructor Profile</h2>
             </div>
 
-            {/* Name */}
-            <div>
-              <label className="block font-medium mb-2">Full Name</label>
-
-              <input
-                type="text"
-                name="name"
-                onChange={handleChange}
-                className="w-full border rounded-lg p-3"
-                placeholder="John Doe"
+            <div className="grid md:grid-cols-2 gap-6">
+              <Input label="Full Name" placeholder="John Doe" />
+              <Input
+                label="Professional Title"
+                placeholder="Full Stack Developer"
               />
-            </div>
+              <Input label="Email" disabled placeholder="john@example.com" />
+              <Input label="Phone" placeholder="Enter phone" />
 
-            {/* Bio */}
-            <div>
-              <label className="block font-medium mb-2">Bio</label>
-
-              <textarea
-                name="bio"
-                rows={4}
-                onChange={handleChange}
-                className="w-full border rounded-lg p-3"
-                placeholder="Tell students about yourself..."
-              />
-            </div>
-
-            {/* Experience */}
-            <div>
-              <label className="block font-medium mb-2">
-                Experience (Years)
-              </label>
-
-              <input
-                type="number"
-                min={0}
-                max={10}
-                name="experience"
-                onChange={handleChange}
-                className="w-full border rounded-lg p-3"
-                placeholder="5"
-              />
-            </div>
-
-            {/* Expertise */}
-            <div>
-              <label className="block font-medium mb-2">
-                Expertise / Skills
-              </label>
-
-              <input
-                type="text"
-                name="expertise"
-                onChange={handleChange}
-                className="w-full border rounded-lg p-3"
-                placeholder="React, Node.js, AWS"
-              />
-            </div>
-
-            {/* Social Links */}
-            <div className="grid md:grid-cols-3 gap-4">
-              <div>
-                <label className="block font-medium mb-2">LinkedIn</label>
-
-                <input
-                  type="text"
-                  name="linkedin"
-                  onChange={handleChange}
-                  className="w-full border rounded-lg p-3"
-                />
+              <div className="md:col-span-2">
+                <Input label="Expertise" placeholder="React, Node, AI..." />
               </div>
 
-              <div>
-                <label className="block font-medium mb-2">GitHub</label>
-
-                <input
-                  type="text"
-                  name="github"
-                  onChange={handleChange}
-                  className="w-full border rounded-lg p-3"
-                />
-              </div>
-
-              <div>
-                <label className="block font-medium mb-2">Website</label>
-
-                <input
-                  type="text"
-                  name="website"
-                  onChange={handleChange}
-                  className="w-full border rounded-lg p-3"
+              <div className="md:col-span-2">
+                <label className="block text-sm mb-1">Bio</label>
+                <textarea
+                  className="w-full border rounded-lg p-3 h-28"
+                  placeholder="Tell students about yourself..."
                 />
               </div>
             </div>
 
-            {/* Save Button */}
-            <div className="flex justify-end">
-              <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700">
-                Save Changes
+            <div className="mt-6 flex justify-end">
+              <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg">
+                Save Profile
               </button>
             </div>
-          </form>
+          </section>
+
+          {/* Security */}
+          <section className="bg-white rounded-xl border p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Lock className="text-indigo-600" />
+              <h2 className="text-xl font-semibold">Security</h2>
+            </div>
+
+            <div className="space-y-4">
+              <ActionRow
+                title="Password"
+                desc="Update your password"
+                btn="Change"
+              />
+              <ActionRow
+                title="2FA"
+                desc="Enable extra security"
+                btn="Enable"
+              />
+            </div>
+          </section>
+
+          {/* Notifications */}
+          <section className="bg-white rounded-xl border p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Bell className="text-indigo-600" />
+              <h2 className="text-xl font-semibold">Notifications</h2>
+            </div>
+
+            <Toggle label="Student Enrollments" />
+            <Toggle label="Course Reviews" />
+            <Toggle label="Announcements" />
+          </section>
+
+          {/* Privacy */}
+          <section className="bg-white rounded-xl border p-6">
+            <div className="flex items-center gap-3 mb-6">
+              <Shield className="text-indigo-600" />
+              <h2 className="text-xl font-semibold">Privacy</h2>
+            </div>
+
+            <Toggle label="Public Instructor Profile" />
+            <Toggle label="Show Earnings" />
+          </section>
         </div>
+      </main>
+    </div>
+  );
+}
+
+/* Components */
+function Input({ label, ...props }: any) {
+  return (
+    <div>
+      <label className="text-sm mb-1 block">{label}</label>
+      <input
+        {...props}
+        className="w-full border rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 disabled:bg-slate-100"
+      />
+    </div>
+  );
+}
+
+function StatCard({ title, value }: any) {
+  return (
+    <div className="border rounded-lg p-4">
+      <p className="text-sm text-slate-500">{title}</p>
+      <h3 className="text-xl font-semibold">{value}</h3>
+    </div>
+  );
+}
+
+function ActionRow({ title, desc, btn }: any) {
+  return (
+    <div className="flex justify-between items-center">
+      <div>
+        <p className="font-medium">{title}</p>
+        <p className="text-sm text-slate-500">{desc}</p>
       </div>
+      <button className="border px-4 py-2 rounded-lg hover:bg-slate-100">
+        {btn}
+      </button>
+    </div>
+  );
+}
+
+function Toggle({ label }: any) {
+  return (
+    <div className="flex justify-between items-center py-2">
+      <p>{label}</p>
+      <input type="checkbox" className="h-5 w-5 accent-indigo-600" />
     </div>
   );
 }

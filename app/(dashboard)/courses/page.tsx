@@ -1,8 +1,9 @@
 "use client";
 
-import { BookOpen, Clock, BarChart3 } from "lucide-react";
+import { BookOpen, Clock, BarChart3, User, Star } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Course = {
   _id: number;
@@ -10,11 +11,23 @@ type Course = {
   description: string;
   level: "Beginner" | "Intermediate" | "Advanced";
   duration: string;
+  rating: number;
+  enrolledStudents: [];
   category: string;
 };
+
 export default function Page() {
   const [courses, setCourses] = useState<Course[]>([]);
-  const progress = 10;
+  const router = useRouter();
+
+  const filter = {
+    level: "",
+    category: "",
+  };
+
+  //TODO : Implement filtering and searching
+  const handleChange = () => {};
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
@@ -51,14 +64,22 @@ export default function Page() {
             className="w-full md:w-1/3 rounded-lg border border-slate-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
 
-          <select className="rounded-lg border border-slate-300 px-4 py-2">
+          <select
+            className="rounded-lg border border-slate-300 px-4 py-2"
+            onChange={handleChange}
+            value={filter.category}
+          >
             <option>All Levels</option>
             <option>Beginner</option>
             <option>Intermediate</option>
             <option>Advanced</option>
           </select>
 
-          <select className="rounded-lg border border-slate-300 px-4 py-2">
+          <select
+            className="rounded-lg border border-slate-300 px-4 py-2"
+            onChange={handleChange}
+            value={filter.level}
+          >
             <option>All Categories</option>
             <option>Core CS</option>
             <option>Systems</option>
@@ -72,13 +93,20 @@ export default function Page() {
           {courses.map((course) => (
             <div
               key={course._id}
-              className="rounded-xl border shadow:md border-slate-200 bg-white p-6 hover:shadow-md transition"
+              className="rounded-xl border hover:cursor-pointer shadow:md border-slate-200 bg-white p-6 hover:shadow-md transition"
             >
               <span className="text-xs font-medium text-indigo-600">
                 {course.category}
               </span>
 
-              <h2 className="text-xl font-semibold mt-2">{course.title}</h2>
+              <h2
+                className="text-xl font-semibold hover:underline mt-2"
+                onClick={() => {
+                  router.push(`/coursedesc/${course._id}`);
+                }}
+              >
+                {course.title}
+              </h2>
 
               <p className="text-slate-600 text-sm mt-2">
                 {course.description}
@@ -92,6 +120,14 @@ export default function Page() {
                 <div className="flex items-center gap-1">
                   <Clock size={16} />
                   {course.duration}
+                </div>
+                <div className="flex items-center gap-1">
+                  <User size={16} />
+                  {course.enrolledStudents?.length || 0}
+                </div>
+                <div className="flex items-center gap-1">
+                  <Star size={16} className="" />
+                  {course.rating}
                 </div>
               </div>
 
@@ -109,12 +145,15 @@ export default function Page() {
                 </div>
               </div> */}
 
-              <Link href={`/courseplay`}>
-                <button className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition px-4 py-2 font-medium">
-                  <BookOpen size={18} />
-                  Enroll
-                </button>
-              </Link>
+              <button
+                className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition px-4 py-2 font-medium"
+                onClick={() => {
+                  router.push(`/courseplay`);
+                }}
+              >
+                <BookOpen size={18} />
+                Enroll
+              </button>
             </div>
           ))}
         </div>

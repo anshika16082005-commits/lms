@@ -6,6 +6,7 @@ import type { NextRequest } from "next/server";
 
 connect();
 
+//Note:For student dashboard
 export async function GET(request: NextRequest) {
   try {
     const userId = request.headers.get("x-user-id");

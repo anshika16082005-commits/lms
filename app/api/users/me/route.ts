@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   if (user.role === "instructor") {
     await user.populate(
       "createdCourses",
-      "title description price level category rating",
+      "title description price level category rating thumbnail",
     );
     return NextResponse.json({ message: "Instructor Found", data: user });
   }

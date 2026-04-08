@@ -166,9 +166,11 @@ export default function InstructorProfile() {
               >
                 <div className="h-40">
                   <img
-                    src="/images/softwaredevelopment.jpg"
+                    src={
+                      course.thumbnail?.url || "/images/softwaredevelopment.jpg"
+                    }
                     alt=""
-                    className="bg-cover"
+                    className="w-full h-full"
                   />
                 </div>
 
