@@ -4,7 +4,20 @@ import { Github, Linkedin, Globe, BookOpen, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function InstructorProfile() {
-  const [instructor, setInstructor] = useState({
+  // ✅ FIXED TYPES
+  const [instructor, setInstructor] = useState<{
+    name: string;
+    profileImage: string;
+    bio: string;
+    expertise: string[];
+    createdCourses: any[];
+    experience: number;
+    socialLinks: {
+      linkedin: string;
+      github: string;
+      website: string;
+    };
+  }>({
     name: "",
     profileImage: "",
     bio: "",
@@ -18,6 +31,19 @@ export default function InstructorProfile() {
     },
   });
 
+  // ✅ EDIT STATES
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    bio: "",
+    experience: 0,
+    expertise: "",
+    linkedin: "",
+    github: "",
+    website: "",
+  });
+
   useEffect(() => {
     const fetchInstructor = async () => {
       try {
@@ -27,36 +53,62 @@ export default function InstructorProfile() {
             "Content-Type": "application/json",
           },
         });
+
         const { data } = await res.json();
-        console.log("Instructor Data:", data);
+
         setInstructor({
-          name: data.name ? data.name : "John Doe",
+          name: data.name,
           profileImage: data.profileImage
             ? data.profileImage
             : "https://images.unsplash.com/photo-1607746882042-944635dfe10e",
-          bio: data.bio
-            ? data.bio
-            : "Passionate educator with 8+ years of experience in web development. Dedicated to empowering students with practical skills and real-world knowledge.",
-          expertise: data.expertise
-            ? data.expertise
-            : ["Web Development", "JavaScript", "React"],
-          experience: data.experience ? data.experience : 8,
-          createdCourses: data.createdCourses ? data.createdCourses : [],
+          bio: data.bio,
+          expertise: data.expertise || [], // ✅ SAFE
+          experience: data.experience,
+          createdCourses: data.createdCourses || [],
+          socialLinks: data.socialLinks || {
+            linkedin: "#",
+            github: "#",
+            website: "#",
+          },
+        });
 
-          socialLinks: data.socialLinks
-            ? data.socialLinks
-            : {
-                linkedin: "#",
-                github: "#",
-                website: "#",
-              },
+        // ✅ SYNC FORM
+        setFormData({
+          name: data.name || "",
+          bio: data.bio || "",
+          experience: data.experience || 0,
+          expertise: data.expertise?.join(", ") || "",
+          linkedin: data.socialLinks?.linkedin || "",
+          github: data.socialLinks?.github || "",
+          website: data.socialLinks?.website || "",
         });
       } catch (error) {
         console.error("Error fetching instructor profile:", error);
       }
     };
+
     fetchInstructor();
   }, []);
+
+  // ✅ SAVE FUNCTION
+  const handleSave = () => {
+    setInstructor({
+      ...instructor,
+      name: formData.name,
+      bio: formData.bio,
+      experience: formData.experience,
+      expertise: formData.expertise
+        ? formData.expertise.split(",").map((e) => e.trim())
+        : [],
+      socialLinks: {
+        linkedin: formData.linkedin,
+        github: formData.github,
+        website: formData.website,
+      },
+    });
+
+    setIsEditing(false);
+  };
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
@@ -66,6 +118,14 @@ export default function InstructorProfile() {
       <div className="max-w-6xl mx-auto px-6">
         {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow-lg p-8 -mt-20 relative">
+          {/* ✅ EDIT BUTTON */}
+          <button
+            onClick={() => setIsEditing(true)}
+            className="absolute top-4 right-4 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700"
+          >
+            Edit Profile
+          </button>
+
           <div className="flex flex-col md:flex-row gap-8">
             {/* Profile Image */}
             <img
@@ -92,7 +152,7 @@ export default function InstructorProfile() {
 
               {/* Expertise */}
               <div className="flex flex-wrap gap-2 mt-4">
-                {instructor.expertise.map((skill, index) => (
+                {instructor.expertise?.map((skill: string, index: number) => (
                   <span
                     key={index}
                     className="bg-indigo-100 text-indigo-700 px-3 py-1 text-sm rounded-full"
@@ -194,6 +254,131 @@ export default function InstructorProfile() {
           </div>
         </div>
       </div>
+
+      {/* ✅ EDIT MODAL */}
+      {isEditing && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl w-125 space-y-4">
+            <h2 className="text-xl font-bold text-gray-800">Edit Profile</h2>
+
+            {/* Name */}
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                Full Name
+              </label>
+              <input
+                className="w-full border p-2 rounded mt-1"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Bio */}
+            <div>
+              <label className="text-sm font-semibold text-gray-600">Bio</label>
+              <textarea
+                className="w-full border p-2 rounded mt-1"
+                value={formData.bio}
+                onChange={(e) =>
+                  setFormData({ ...formData, bio: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Experience */}
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                Teaching Experience (Years)
+              </label>
+              <input
+                type="number"
+                className="w-full border p-2 rounded mt-1"
+                value={formData.experience}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    experience: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
+
+            {/* Expertise */}
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                Expertise (comma separated)
+              </label>
+              <input
+                className="w-full border p-2 rounded mt-1"
+                value={formData.expertise}
+                onChange={(e) =>
+                  setFormData({ ...formData, expertise: e.target.value })
+                }
+              />
+            </div>
+
+            {/* LinkedIn */}
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                LinkedIn Profile
+              </label>
+              <input
+                className="w-full border p-2 rounded mt-1"
+                value={formData.linkedin}
+                onChange={(e) =>
+                  setFormData({ ...formData, linkedin: e.target.value })
+                }
+              />
+            </div>
+
+            {/* GitHub */}
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                GitHub Profile
+              </label>
+              <input
+                className="w-full border p-2 rounded mt-1"
+                value={formData.github}
+                onChange={(e) =>
+                  setFormData({ ...formData, github: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Website */}
+            <div>
+              <label className="text-sm font-semibold text-gray-600">
+                Personal Website
+              </label>
+              <input
+                className="w-full border p-2 rounded mt-1"
+                value={formData.website}
+                onChange={(e) =>
+                  setFormData({ ...formData, website: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-3 pt-2">
+              <button
+                onClick={() => setIsEditing(false)}
+                className="text-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="bg-indigo-600 text-white px-4 py-2 rounded"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 type Course = {
@@ -24,11 +24,13 @@ const CreateCoursePage = () => {
 
   const router = useRouter();
   const [thumbnail, setThumbnail] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const [errors, setErrors] = useState<Partial<Record<keyof Course, string>>>(
     {},
   );
 
+  // ✅ Validation
   const validate = () => {
     const newErrors: Partial<Record<keyof Course, string>> = {};
 
@@ -56,17 +58,7 @@ const CreateCoursePage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const convertToBase64 = (file: File) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
+  // ✅ Input handler
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -75,12 +67,25 @@ const CreateCoursePage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // ✅ Thumbnail + Preview
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setThumbnail(e.target.files?.[0]);
+      const file = e.target.files[0];
+      setThumbnail(file);
+
+      const previewUrl = URL.createObjectURL(file);
+      setPreview(previewUrl);
     }
   };
 
+  // ✅ Cleanup preview memory
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
+  // ✅ Submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -118,7 +123,9 @@ const CreateCoursePage = () => {
       {/* Page Title */}
       <div className="mb-10">
         <h1 className="text-3xl font-semibold ">Create New Course</h1>
-        <p className="text-white mt-1">Add the basic details for your course</p>
+        <p className="text-gray-500 mt-1">
+          Add the basic details for your course
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-10 max-w-4xl">
@@ -137,7 +144,7 @@ const CreateCoursePage = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full border-2 border-gray-500 text-black rounded-md p-3   focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border-2 border-gray-500 text-black rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.title && (
               <p className="text-red-500 text-sm mt-1">{errors.title}</p>
@@ -241,17 +248,28 @@ const CreateCoursePage = () => {
             </p>
           </div>
 
-          <div className="col-span-2">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleThumbnailChange}
-              className="w-full border-2 border-gray-500 text-black rounded-md p-3"
-            />
-            {thumbnail && (
-              <p className="text-sm text-green-600 mt-2">
-                Selected: {thumbnail.name}
-              </p>
+          <div className="col-span-2 flex gap-6 items-start">
+            <div className="flex-1">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleThumbnailChange}
+                className="w-full border-2 border-gray-500 text-black rounded-md p-3"
+              />
+
+              {thumbnail && (
+                <p className="text-sm text-green-600 mt-2">
+                  Selected: {thumbnail.name}
+                </p>
+              )}
+            </div>
+
+            {preview && (
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-40 h-28 object-cover rounded-md border"
+              />
             )}
           </div>
         </div>

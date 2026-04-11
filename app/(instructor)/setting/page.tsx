@@ -15,50 +15,10 @@ export default function Page() {
               Manage your teaching profile, earnings and preferences
             </p>
           </div>
-
-          <button className="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-500">
-            + Create Course
-          </button>
         </div>
 
         {/* Sections */}
         <div className="space-y-8 max-w-5xl">
-          {/* Instructor Profile */}
-          <section className="bg-white rounded-xl border p-6">
-            <div className="flex items-center gap-3 mb-6">
-              <User className="text-indigo-600" />
-              <h2 className="text-xl font-semibold">Instructor Profile</h2>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <Input label="Full Name" placeholder="John Doe" />
-              <Input
-                label="Professional Title"
-                placeholder="Full Stack Developer"
-              />
-              <Input label="Email" disabled placeholder="john@example.com" />
-              <Input label="Phone" placeholder="Enter phone" />
-
-              <div className="md:col-span-2">
-                <Input label="Expertise" placeholder="React, Node, AI..." />
-              </div>
-
-              <div className="md:col-span-2">
-                <label className="block text-sm mb-1">Bio</label>
-                <textarea
-                  className="w-full border rounded-lg p-3 h-28"
-                  placeholder="Tell students about yourself..."
-                />
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg">
-                Save Profile
-              </button>
-            </div>
-          </section>
-
           {/* Security */}
           <section className="bg-white rounded-xl border p-6">
             <div className="flex items-center gap-3 mb-6">
@@ -71,11 +31,6 @@ export default function Page() {
                 title="Password"
                 desc="Update your password"
                 btn="Change"
-              />
-              <ActionRow
-                title="2FA"
-                desc="Enable extra security"
-                btn="Enable"
               />
             </div>
           </section>

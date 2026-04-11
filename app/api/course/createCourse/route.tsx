@@ -50,7 +50,7 @@ export async function POST(request: NextRequest): Promise<Response> {
     return new Promise((resolve) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: "lms-assets/images",
+          folder: process.env.CLOUDINARY_IMAGE_FOLDER,
         },
         async (error, result) => {
           if (error || !result) {

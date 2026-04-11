@@ -1,4 +1,35 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+
+export interface ICourse extends Document {
+  title: String;
+  description: String;
+  thumbnail: {
+    url: String;
+    public_id: String;
+  };
+  price: number;
+  category: String;
+  level: "Beginner" | "Intermediate" | "Advanced";
+  duration: String;
+  instructor: mongoose.Schema.Types.ObjectId;
+  modules: {
+    title: String;
+    description: String;
+    lesson: {
+      title: String;
+      description: String;
+      url: String;
+      completed: boolean;
+      type: String;
+      duration: number;
+      isPreview: boolean;
+    }[];
+  }[];
+  enrolledStudents: mongoose.Schema.Types.ObjectId[];
+  rating: number;
+  totalReviews: number;
+  isPublished: boolean;
+}
 
 const lessonSchema = new mongoose.Schema({
   title: String,
@@ -77,4 +108,5 @@ const courseSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.models.Course || mongoose.model("Course", courseSchema);
+export default mongoose.models.Course ||
+  mongoose.model<ICourse>("Course", courseSchema);

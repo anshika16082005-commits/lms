@@ -79,6 +79,12 @@ const userSchema: Schema = new Schema(
       default: 0,
     },
 
+    status: {
+      type: String,
+      enum: ["active,completed"],
+      default: "active",
+    },
+
     createdCourses: [
       {
         type: mongoose.Schema.Types.ObjectId,

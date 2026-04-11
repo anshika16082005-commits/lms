@@ -34,9 +34,9 @@ export async function PATCH(request: NextRequest) {
       {
         $set: {
           "modules.$[mod].lessons.$[les].title":
-            lessons.title || "No lesson title",
+            lessons.title || "No lesson title provided",
           "modules.$[mod].lessons.$[les].description":
-            lessons.description || "No lesson description",
+            lessons.description || "No lesson description provided",
           "modules.$[mod].lessons.$[les].url": lessons.url || "No lesson URL",
           "modules.$[mod].lessons.$[les].type": lessons.type || "video",
           "modules.$[mod].lessons.$[les].isPreview": lessons.isPreview || false,
@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
     const { lessons } = await request.json();
+
     if (!lessons) {
       return NextResponse.json(
         { error: "Lessons are required" },

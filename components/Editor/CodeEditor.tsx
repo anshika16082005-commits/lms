@@ -12,7 +12,7 @@ const CodeEditor = () => {
     <div>
       <Editor
         height="90vh"
-        language="python"
+        language="javascript"
         theme="vs-dark"
         value={code}
         onChange={handleEditorChange}

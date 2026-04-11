@@ -1,34 +1,44 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import { Users, BookOpen, TrendingUp, Star, Eye } from "lucide-react";
 
 export default function InstructorAnalytics() {
-  const courses = [
-    {
-      title: "React Bootcamp",
-      students: 850,
-      rating: 4.8,
-      completion: 82,
-      lessons: 45,
-      updated: "2 days ago",
-    },
-    {
-      title: "Node.js Mastery",
-      students: 620,
-      rating: 4.7,
-      completion: 78,
-      lessons: 38,
-      updated: "1 week ago",
-    },
-    {
-      title: "MongoDB Basics",
-      students: 420,
-      rating: 4.6,
-      completion: 74,
-      lessons: 26,
-      updated: "3 weeks ago",
-    },
-  ];
+  type CourseType = {
+    title: string;
+    students: number;
+    rating: number;
+    completion: number;
+    lessons: number;
+    updated: string;
+  };
+
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<any>({});
+  const [courses, setCourses] = useState<CourseType[]>([]);
+  const [topCourses, setTopCourses] = useState<any[]>([]);
+  const [ratingBreakdown, setRatingBreakdown] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const res = await fetch("/api/instructor/analytics");
+        const data = await res.json();
+
+        setStats(data?.stats || {});
+        setCourses(data?.courseAnalytics || []);
+        setTopCourses(data?.topCourses || []);
+        setRatingBreakdown(data?.ratingBreakdown || []);
+      } catch (error) {
+        console.error("Error fetching analytics:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnalytics();
+  }, []);
+  if (loading) {
+    return <div className="p-8 text-gray-500">Loading analytics...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -58,7 +68,9 @@ export default function InstructorAnalytics() {
             </div>
             <div>
               <p className="text-gray-500 text-sm">Total Students</p>
-              <h2 className="text-2xl font-bold">3,240</h2>
+              <h2 className="text-2xl font-bold">
+                {stats?.totalStudents || 0}
+              </h2>
               <p className="text-green-600 text-xs">+12% from last month</p>
             </div>
           </div>
@@ -69,7 +81,7 @@ export default function InstructorAnalytics() {
             </div>
             <div>
               <p className="text-gray-500 text-sm">Courses</p>
-              <h2 className="text-2xl font-bold">12</h2>
+              <h2 className="text-2xl font-bold">{stats?.totalCourses || 0}</h2>
               <p className="text-gray-400 text-xs">Active courses</p>
             </div>
           </div>
@@ -80,7 +92,7 @@ export default function InstructorAnalytics() {
             </div>
             <div>
               <p className="text-gray-500 text-sm">Average Rating</p>
-              <h2 className="text-2xl font-bold">4.8</h2>
+              <h2 className="text-2xl font-bold">{stats?.avgRating || 0}</h2>
               <p className="text-gray-400 text-xs">Across all courses</p>
             </div>
           </div>
@@ -91,7 +103,9 @@ export default function InstructorAnalytics() {
             </div>
             <div>
               <p className="text-gray-500 text-sm">Completion Rate</p>
-              <h2 className="text-2xl font-bold">78%</h2>
+              <h2 className="text-2xl font-bold">
+                {stats?.completionRate || 0}%
+              </h2>
               <p className="text-green-600 text-xs">+5% improvement</p>
             </div>
           </div>
@@ -134,23 +148,13 @@ export default function InstructorAnalytics() {
               </thead>
 
               <tbody>
-                <tr className="border-b">
-                  <td className="py-3">React Bootcamp</td>
-                  <td>850</td>
-                  <td>⭐ 4.8</td>
-                </tr>
-
-                <tr className="border-b">
-                  <td className="py-3">Node.js Mastery</td>
-                  <td>620</td>
-                  <td>⭐ 4.7</td>
-                </tr>
-
-                <tr>
-                  <td className="py-3">MongoDB Basics</td>
-                  <td>420</td>
-                  <td>⭐ 4.6</td>
-                </tr>
+                {topCourses.map((course, index) => (
+                  <tr key={index} className="border-b">
+                    <td className="py-3">{course.title}</td>
+                    <td>{course.students}</td>
+                    <td>⭐ {course.rating}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

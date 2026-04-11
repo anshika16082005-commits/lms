@@ -1,46 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { DollarSign, TrendingUp, Users, Clock } from "lucide-react";
 
 export default function InstructorEarnings() {
-  const courses = [
-    {
-      title: "React Bootcamp",
-      students: 850,
-      earnings: "$8,450",
-    },
-    {
-      title: "Next.js Mastery",
-      students: 620,
-      earnings: "$6,200",
-    },
-    {
-      title: "JavaScript Fundamentals",
-      students: 430,
-      earnings: "$3,900",
-    },
-  ];
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  const transactions = [
-    {
-      student: "Aman Sharma",
-      course: "React Bootcamp",
-      amount: "$49",
-      date: "12 Mar 2026",
-    },
-    {
-      student: "Priya Singh",
-      course: "Next.js Mastery",
-      amount: "$59",
-      date: "11 Mar 2026",
-    },
-    {
-      student: "Rahul Verma",
-      course: "JavaScript Fundamentals",
-      amount: "$39",
-      date: "10 Mar 2026",
-    },
-  ];
+  useEffect(() => {
+    const fetchEarnings = async () => {
+      try {
+        const res = await fetch("/api/instructor/earning");
+        const result = await res.json();
+        setData(result);
+      } catch (error) {
+        console.error("Error fetching earnings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEarnings();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Loading earnings...
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-50 min-h-screen p-8">
@@ -57,7 +46,9 @@ export default function InstructorEarnings() {
             <p className="text-gray-500 text-sm">Total Earnings</p>
             <DollarSign size={20} className="text-green-600" />
           </div>
-          <h2 className="text-2xl font-bold mt-3">$18,550</h2>
+          <h2 className="text-2xl font-bold mt-3">
+            {data?.stats?.totalEarnings || "$0"}
+          </h2>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-sm border">
@@ -65,7 +56,9 @@ export default function InstructorEarnings() {
             <p className="text-gray-500 text-sm">This Month</p>
             <TrendingUp size={20} className="text-blue-600" />
           </div>
-          <h2 className="text-2xl font-bold mt-3">$2,340</h2>
+          <h2 className="text-2xl font-bold mt-3">
+            {data?.stats?.thisMonth || "$0"}
+          </h2>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-sm border">
@@ -73,7 +66,9 @@ export default function InstructorEarnings() {
             <p className="text-gray-500 text-sm">Total Students</p>
             <Users size={20} className="text-purple-600" />
           </div>
-          <h2 className="text-2xl font-bold mt-3">1,900</h2>
+          <h2 className="text-2xl font-bold mt-3">
+            {data?.stats?.totalStudents || 0}
+          </h2>
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-sm border">
@@ -81,7 +76,9 @@ export default function InstructorEarnings() {
             <p className="text-gray-500 text-sm">Pending Payout</p>
             <Clock size={20} className="text-orange-500" />
           </div>
-          <h2 className="text-2xl font-bold mt-3">$780</h2>
+          <h2 className="text-2xl font-bold mt-3">
+            {data?.stats?.pendingPayout || "$0"}
+          </h2>
         </div>
       </div>
 
@@ -95,7 +92,6 @@ export default function InstructorEarnings() {
       </div>
 
       {/* Course Earnings Table */}
-
       <div className="bg-white rounded-xl border shadow-sm mb-10">
         <div className="p-6 border-b">
           <h2 className="text-lg font-semibold">Earnings by Course</h2>
@@ -111,21 +107,28 @@ export default function InstructorEarnings() {
           </thead>
 
           <tbody>
-            {courses.map((course, index) => (
-              <tr key={index} className="border-t hover:bg-gray-50">
-                <td className="p-4 font-medium">{course.title}</td>
-                <td className="p-4">{course.students}</td>
-                <td className="p-4 font-semibold text-green-600">
-                  {course.earnings}
+            {data?.courses?.length > 0 ? (
+              data.courses.map((course: any, index: number) => (
+                <tr key={index} className="border-t hover:bg-gray-50">
+                  <td className="p-4 font-medium">{course.title}</td>
+                  <td className="p-4">{course.students}</td>
+                  <td className="p-4 font-semibold text-green-600">
+                    {course.earnings}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td className="p-4 text-gray-500" colSpan={3}>
+                  No courses found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Recent Transactions */}
-
       <div className="bg-white rounded-xl border shadow-sm">
         <div className="p-6 border-b">
           <h2 className="text-lg font-semibold">Recent Purchases</h2>
@@ -142,16 +145,24 @@ export default function InstructorEarnings() {
           </thead>
 
           <tbody>
-            {transactions.map((tx, index) => (
-              <tr key={index} className="border-t hover:bg-gray-50">
-                <td className="p-4">{tx.student}</td>
-                <td className="p-4">{tx.course}</td>
-                <td className="p-4 font-semibold text-green-600">
-                  {tx.amount}
+            {data?.transactions?.length > 0 ? (
+              data.transactions.map((tx: any, index: number) => (
+                <tr key={index} className="border-t hover:bg-gray-50">
+                  <td className="p-4">{tx.student}</td>
+                  <td className="p-4">{tx.course}</td>
+                  <td className="p-4 font-semibold text-green-600">
+                    {tx.amount}
+                  </td>
+                  <td className="p-4 text-gray-500">{tx.date}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td className="p-4 text-gray-500" colSpan={4}>
+                  No transactions found
                 </td>
-                <td className="p-4 text-gray-500">{tx.date}</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

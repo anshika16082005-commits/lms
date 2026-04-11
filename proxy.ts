@@ -37,5 +37,9 @@ export const config = {
     "/teacherProfile",
     "/profile",
     "/courseplay",
+    "/api/instructor/student",
+    "/student",
+    "/api/course/enroll",
+    "/courses",
   ],
 };

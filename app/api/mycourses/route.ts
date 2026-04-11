@@ -10,8 +10,6 @@ connect();
 export async function GET(request: NextRequest) {
   try {
     const userId = request.headers.get("x-user-id");
-
-    console.log(typeof userId, "User ID from header:", userId);
     const user = await User.findById({ _id: userId });
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

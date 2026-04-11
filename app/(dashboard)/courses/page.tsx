@@ -4,6 +4,7 @@ import { BookOpen, Clock, BarChart3, User, Star } from "lucide-react";
 import Link from "next/link";
 import { ReactElement, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type Course = {
   _id: number;
@@ -27,6 +28,26 @@ export default function Page() {
 
   //TODO : Implement filtering and searching
   const handleChange = () => {};
+
+  const handleEnroll = async (courseId: string) => {
+    try {
+      const reponse = await fetch(`/api/course/enroll?courseId=${courseId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const { message } = await reponse.json();
+      // const { data } = await reponse.json();
+
+      // console.log(data);
+
+      toast.success(message);
+    } catch (error: any) {
+      toast.error("Error occured");
+    }
+  };
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -148,7 +169,8 @@ export default function Page() {
               <button
                 className="mt-6 w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition px-4 py-2 font-medium"
                 onClick={() => {
-                  router.push(`/courseplay`);
+                  router.push(`/courseplay?courseId=${course._id}`);
+                  handleEnroll(`${course._id}`);
                 }}
               >
                 <BookOpen size={18} />

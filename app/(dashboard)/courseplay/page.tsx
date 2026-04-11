@@ -54,7 +54,7 @@ export default function CoursePlayer() {
       {/* MAIN */}
       <div className="flex-1 p-6 space-y-6">
         {/* VIDEO PLAYER */}
-        <div className="w-full h-[420px] bg-black rounded-2xl flex items-center justify-center text-white text-lg shadow-lg">
+        <div className="w-full h-105 bg-black rounded-2xl flex items-center justify-center text-white text-lg shadow-lg">
           ▶ Video Player
         </div>
 
