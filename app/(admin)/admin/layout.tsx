@@ -30,16 +30,14 @@ export default function AdminLayout({
   const menuItems = [
     { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
     { name: "Course Manage", href: "/admin/coursemanage", icon: BookOpen },
-    {
-      name: "Instructor Manage",
-      href: "/admin/instmanage",
-      icon: GraduationCap,
-    },
     { name: "User Manage", href: "/admin/usermanage", icon: Users },
-    { name: "Payouts", href: "/admin/payouts", icon: Wallet },
+
+    //todo:Implement payout functionality if possible
+    // { name: "Payouts", href: "/admin/payouts", icon: Wallet },
     { name: "Reports", href: "/admin/reports", icon: AlertTriangle },
-    { name: "Student Progress", href: "/admin/stuprogress", icon: TrendingUp },
-    { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+
+    //todo:Course analytics implement
+    // { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
     { name: "Notifications", href: "/admin/notify", icon: Bell },
     { name: "Settings", href: "/admin/settings", icon: Settings },
   ];

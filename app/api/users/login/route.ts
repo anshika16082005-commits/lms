@@ -18,7 +18,13 @@ export async function POST(request: NextRequest) {
         { status: 400 },
       );
     }
-    console.log("User exists");
+
+    if (user.role !== role) {
+      return NextResponse.json(
+        { message: "Invalid User credentials" },
+        { status: 404 },
+      );
+    }
     const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) {
       return NextResponse.json(

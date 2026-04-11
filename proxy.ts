@@ -41,5 +41,7 @@ export const config = {
     "/student",
     "/api/course/enroll",
     "/courses",
+    "/api/admin/usermanage",
+    "/admin/usermanage",
   ],
 };

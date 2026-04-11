@@ -1,35 +1,56 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Search } from "lucide-react";
+import toast from "react-hot-toast";
 
+type user = {
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+};
 export default function UserManagement() {
   const [search, setSearch] = useState("");
 
-  const users = [
-    {
-      name: "John Doe",
-      email: "john@example.com",
-      role: "Student",
-      status: "Active",
-    },
-    {
-      name: "Sarah Smith",
-      email: "sarah@example.com",
-      role: "Instructor",
-      status: "Pending",
-    },
-    {
-      name: "Alex Johnson",
-      email: "alex@example.com",
-      role: "Student",
-      status: "Banned",
-    },
-  ];
+  const [users, setUsers] = useState<user[]>([]);
+
+  const handleDelete = async (userId: string) => {
+    try {
+      const reponse = await fetch(`/api/admin/usermanage?uid=${userId}`, {
+        method: "DELETE",
+      });
+
+      const { data } = await reponse.json();
+
+      setUsers((prev) => prev.filter((c) => c._id !== userId));
+      toast.success(
+        `User with Name:${data.name}, Email:${data.email}, Role:${data.role} has been deleted successfully`,
+      );
+    } catch (error: any) {
+      toast.error(`Error occures:${error}`);
+      console.error("Fetch User:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("/api/admin/usermanage");
+
+        if (!response.ok) throw new Error("API error");
+
+        const { data } = await response.json();
+        setUsers(data);
+      } catch (error: any) {
+        console.error("Fetching User:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <div className="p-6 space-y-6">
@@ -71,17 +92,17 @@ export default function UserManagement() {
                 <th className="py-3">Name</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th>Status</th>
+                {/* <th>Status</th> */}
                 <th className="text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
+              {users.map((user) => (
+                <tr key={user._id} className="border-b hover:bg-gray-50">
                   <td className="py-3 font-medium">{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
-                  <td>
+                  {/* <td>
                     <Badge
                       variant={
                         user.status === "Active"
@@ -93,7 +114,7 @@ export default function UserManagement() {
                     >
                       {user.status}
                     </Badge>
-                  </td>
+                  </td> */}
                   <td className="text-right space-x-2">
                     <Button size="sm" variant="outline">
                       View
@@ -101,7 +122,11 @@ export default function UserManagement() {
                     <Button size="sm" variant="outline">
                       Edit
                     </Button>
-                    <Button size="sm" variant="destructive">
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDelete(user._id)}
+                    >
                       Delete
                     </Button>
                   </td>

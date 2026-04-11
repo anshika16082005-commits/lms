@@ -81,7 +81,7 @@ const userSchema: Schema = new Schema(
 
     status: {
       type: String,
-      enum: ["active,completed"],
+      enum: ["active", "completed"],
       default: "active",
     },
 
