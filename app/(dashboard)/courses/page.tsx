@@ -116,6 +116,8 @@ export default function Page() {
               key={course._id}
               className="rounded-xl border hover:cursor-pointer shadow:md border-slate-200 bg-white p-6 hover:shadow-md transition"
             >
+              {/* 🔥 Report Button (TOP RIGHT) */}
+              <div className="absolute top-4 right-4"></div>
               <span className="text-xs font-medium text-indigo-600">
                 {course.category}
               </span>

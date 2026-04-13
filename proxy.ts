@@ -43,5 +43,9 @@ export const config = {
     "/courses",
     "/api/admin/usermanage",
     "/admin/usermanage",
+    "/api/notification",
+    "/notif",
+    "/api/users/changepassword",
+    "/api/execute",
   ],
 };

@@ -15,6 +15,7 @@ import {
   Settings,
   ChevronRight,
   ChevronLeft,
+  Bell,
 } from "lucide-react";
 
 export default function TeacherLayout({
@@ -38,6 +39,7 @@ export default function TeacherLayout({
     { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: "Profile", href: "/teacherProfile", icon: User },
     { name: "Settings", href: "/setting", icon: Settings },
+    { name: "Notification", href: "/notificat", icon: Bell },
   ];
 
   return (

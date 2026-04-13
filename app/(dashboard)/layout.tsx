@@ -11,6 +11,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  Bell,
 } from "lucide-react";
 
 export default function UserLayout({
@@ -26,6 +27,7 @@ export default function UserLayout({
     { name: "Courses", href: "/courses", icon: BookOpen },
     { name: "Profile", href: "/profile", icon: User },
     { name: "Settings", href: "/settings", icon: Settings },
+    { name: "Notification", href: "/notif", icon: Bell },
   ];
 
   return (

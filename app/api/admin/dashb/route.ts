@@ -54,19 +54,6 @@ export async function GET() {
       0,
     );
 
-    const certificates = Math.floor(activeNow * 0.3);
-
-    const avgRatingData = await Course.aggregate([
-      {
-        $group: {
-          _id: null,
-          avg: { $avg: "$rating" },
-        },
-      },
-    ]);
-
-    const avgRating = avgRatingData[0]?.avg || 0;
-
     return NextResponse.json({
       success: true,
       data: {
@@ -78,8 +65,6 @@ export async function GET() {
         topCourses: formattedCourses,
         stats: {
           activeNow,
-          certificates,
-          avgRating: avgRating.toFixed(1),
         },
       },
     });

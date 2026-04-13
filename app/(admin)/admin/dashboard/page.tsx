@@ -155,7 +155,7 @@ export default function LMSDashboard() {
               </div>
 
               {/* Extra Stats */}
-              <div className="grid md:grid-cols-3 gap-6 mt-8">
+              <div className="grid md:grid-cols-2 gap-6 mt-8">
                 <StatCard
                   title="Active Learners"
                   value={dashboardData.stats.activeNow}
@@ -164,17 +164,11 @@ export default function LMSDashboard() {
                 />
 
                 <StatCard
-                  title="Certificates"
-                  value={dashboardData.stats.certificates}
+                  title="Certificates Issued"
+                  // value={dashboardData.stats.certificates}
+                  value={1}
                   icon={<Award />}
                   color="bg-amber-100 text-amber-600"
-                />
-
-                <StatCard
-                  title="Avg Rating"
-                  value={dashboardData.stats.avgRating}
-                  icon={<TrendingUp />}
-                  color="bg-emerald-100 text-emerald-600"
                 />
               </div>
             </>

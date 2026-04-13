@@ -206,7 +206,7 @@ export default function InstructorProfile() {
           <div className="bg-white p-6 rounded-xl shadow flex items-center gap-4">
             <Star className="text-indigo-600" size={28} />
             <div>
-              <h3 className="text-xl font-bold">4.8</h3>
+              <h3 className="text-xl font-bold">0.0</h3>
               <p className="text-gray-500 text-sm">Rating</p>
             </div>
           </div>

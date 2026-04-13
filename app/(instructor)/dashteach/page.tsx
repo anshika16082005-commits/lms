@@ -49,11 +49,6 @@ export default function InstructorDashboard() {
               Welcome back! Here's an overview of your courses
             </p>
           </div>
-
-          <button className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-3 rounded-lg hover:bg-indigo-700 transition">
-            <PlusCircle size={18} />
-            Create Course
-          </button>
         </div>
 
         {/* Stats Cards */}

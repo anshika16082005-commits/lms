@@ -11,7 +11,22 @@ export default function CourseManagement() {
   const [search, setSearch] = useState("");
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+  const [isViewOpen, setIsViewOpen] = useState(false);
 
+  const handleView = async (id: string) => {
+    try {
+      const res = await fetch(`/api/admin/courseman?id=${id}`);
+      const data = await res.json();
+
+      if (!data.success) throw new Error(data.message);
+
+      setSelectedCourse(data.data);
+      setIsViewOpen(true);
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+  };
   // 🔥 Fetch Courses
   useEffect(() => {
     const fetchCourses = async () => {
@@ -69,7 +84,6 @@ export default function CourseManagement() {
         <h1 className="text-3xl font-bold tracking-tight">Course Management</h1>
         <p className="text-gray-500">Manage and monitor all courses</p>
       </div>
-
       {/* Search */}
       <Card className="rounded-2xl border shadow-sm">
         <CardContent className="p-5 flex items-center gap-4">
@@ -81,7 +95,6 @@ export default function CourseManagement() {
           />
         </CardContent>
       </Card>
-
       {/* Table */}
       <Card className="rounded-2xl border shadow-sm">
         <CardContent className="p-5 overflow-x-auto">
@@ -141,10 +154,13 @@ export default function CourseManagement() {
                     {/* Actions */}
                     <td className="text-right">
                       <div className="flex justify-end gap-2">
-                        <Button size="sm" variant="outline">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleView(course._id)}
+                        >
                           <Eye className="w-4 h-4" />
                         </Button>
-
                         <Button
                           size="sm"
                           variant="destructive"
@@ -167,6 +183,42 @@ export default function CourseManagement() {
           </table>
         </CardContent>
       </Card>
+      <div className="p-6 space-y-6">
+        {isViewOpen && selectedCourse && (
+          <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+            <div className="bg-white p-6 rounded-xl w-[450px] space-y-4">
+              <h2 className="text-xl font-bold">Course Details</h2>
+
+              <p>
+                <b>Title:</b> {selectedCourse.title}
+              </p>
+              <p>
+                <b>Instructor:</b> {selectedCourse.instructor?.name}
+              </p>
+              <p>
+                <b>Email:</b> {selectedCourse.instructor?.email}
+              </p>
+              <p>
+                <b>Price:</b> ₹{selectedCourse.price}
+              </p>
+              <p>
+                <b>Students:</b> {selectedCourse.enrolledStudents?.length}
+              </p>
+
+              <div>
+                <b>Description:</b>
+                <p className="text-gray-600 text-sm mt-1">
+                  {selectedCourse.description}
+                </p>
+              </div>
+
+              <div className="flex justify-end">
+                <Button onClick={() => setIsViewOpen(false)}>Close</Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -34,7 +34,6 @@ export default function AdminLayout({
 
     //todo:Implement payout functionality if possible
     // { name: "Payouts", href: "/admin/payouts", icon: Wallet },
-    { name: "Reports", href: "/admin/reports", icon: AlertTriangle },
 
     //todo:Course analytics implement
     // { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
