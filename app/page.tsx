@@ -7,6 +7,9 @@ import { FeaturedCourses } from "@/components/FeaturedCourse";
 import { ReadyToStartLearning } from "@/components/ReadyToStartLearn";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
+import { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 /* =======================
    HOME PAGE
@@ -41,7 +44,16 @@ const categories = [
     icon: "📱",
   },
 ];
+
 export default function HomePage() {
+  const router = useRouter();
+  const { isLoggedIn } = useAuth();
+  useEffect(() => {
+    if (isLoggedIn) {
+      const role = localStorage.getItem("user-role");
+      router.replace(`/${role}/dashboard`);
+    }
+  }, [router, isLoggedIn]);
   return (
     <main className="bg-gray-50 min-h-screen">
       <Hero />

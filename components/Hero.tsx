@@ -23,7 +23,7 @@ export function Hero() {
           </p>
 
           <div className="mt-10 flex gap-4">
-            <Link href="/login" passHref>
+            <Link href="/auth/login" passHref>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

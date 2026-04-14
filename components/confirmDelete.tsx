@@ -11,24 +11,27 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
+import { Delete } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { useAuth } from "@/context/AuthContext";
 
-export default function ConfirmLogoutDialog() {
+type confirmDeleteProps = {
+  courseId: string;
+};
+export default function ConfirmDeleteDialog({ courseId }: confirmDeleteProps) {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const { logout } = useAuth();
-  const handleLogout = async () => {
+
+  //todo: handle the on delete course view hiding(re-fetching)
+  const handleDelete = async () => {
     try {
-      await fetch("/api/users/logout");
-      toast.success("Logged out successfully");
+      const res = await fetch(`/api/mycourses?courseId=${courseId}`, {
+        method: "DELETE",
+      });
+      const { message } = await res.json();
+      toast.success(message);
       setOpen(false);
-      logout();
     } catch (err) {
-      toast.error("Logout failed");
+      toast.error("Course Delete Failed");
     }
   };
 
@@ -36,12 +39,9 @@ export default function ConfirmLogoutDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger Button */}
       <DialogTrigger asChild>
-        <Button
-          variant="secondary"
-          className="gap-2 bg-red-700 text-white px-4 py-2 font-semibold "
-        >
-          <LogOut size={16} />
-          Logout
+        <Button variant="destructive">
+          <Delete size={10} />
+          Delete
         </Button>
       </DialogTrigger>
 
@@ -49,11 +49,10 @@ export default function ConfirmLogoutDialog() {
       <DialogContent className="sm:max-w-md rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
-            Confirm Logout
+            Confirm Delete
           </DialogTitle>
           <DialogDescription>
-            Are you sure you want to logout? You will need to sign in again to
-            access your account.
+            Are you sure you want to delete this course?
           </DialogDescription>
         </DialogHeader>
 
@@ -62,8 +61,8 @@ export default function ConfirmLogoutDialog() {
             Cancel
           </Button>
 
-          <Button variant="destructive" onClick={handleLogout}>
-            Yes, Logout
+          <Button variant="destructive" onClick={handleDelete}>
+            Yes, Delete
           </Button>
         </DialogFooter>
       </DialogContent>

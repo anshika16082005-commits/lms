@@ -1,4 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
+import cloudinary from "@/lib/cloudinary";
 import Course from "@/models/courseModel";
 import User from "@/models/users";
 import { NextResponse } from "next/server";
@@ -45,6 +46,13 @@ export async function GET(request: NextRequest) {
 export async function DELETE(request: NextRequest) {
   try {
     //TODO: Delete the course and remove the course from the user's enrolled courses list.
+
+    const userId = request.headers.get("x-user-id");
+    const user = await User.findById(userId);
+
+    if (user.role === "student") {
+      return NextResponse.json({ message: "Only instructors are allowed" });
+    }
     const courseId = request.nextUrl.searchParams.get("courseId");
     if (!courseId) {
       return NextResponse.json(
@@ -52,14 +60,17 @@ export async function DELETE(request: NextRequest) {
         { status: 400 },
       );
     }
+
     const course = await Course.findByIdAndDelete(courseId);
-    const createdBy = request.headers.get("x-user-id");
-    await User.findByIdAndUpdate(createdBy, {
-      $pull: { createdCourses: courseId },
-    });
+    if (course.thumbnail.public_id !== undefined) {
+      await cloudinary.uploader.destroy(course.thumbnail.public_id);
+    }
+    // const createdBy = request.headers.get("x-user-id");
+    // await User.findByIdAndUpdate(createdBy, {
+    //   $pull: { createdCourses: courseId },
+    // });
     return NextResponse.json({
       message: "Course deleted successfully",
-      data: course,
       status: 200,
     });
   } catch (error: any) {

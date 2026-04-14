@@ -6,44 +6,32 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
-  PlusCircle,
   BookOpen,
-  Users,
-  Wallet,
-  BarChart3,
   User,
   Settings,
-  ChevronRight,
   ChevronLeft,
+  ChevronRight,
   Bell,
 } from "lucide-react";
 
-export default function TeacherLayout({
+export default function UserLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const pathname = usePathname();
 
   const menuItems = [
-    { name: "Dashboard", href: "/dashteach", icon: LayoutDashboard },
-    {
-      name: "Create Course",
-      href: "/createcourse",
-      icon: PlusCircle,
-    },
-    { name: "My Courses", href: "/my-courses", icon: BookOpen },
-    { name: "Students", href: "/student", icon: Users },
-    { name: "Earnings", href: "/earnings", icon: Wallet },
-    { name: "Analytics", href: "/analytics", icon: BarChart3 },
-    { name: "Profile", href: "/teacherProfile", icon: User },
-    { name: "Settings", href: "/setting", icon: Settings },
-    { name: "Notification", href: "/notificat", icon: Bell },
+    { name: "Dashboard", href: "/student/dashboard", icon: LayoutDashboard },
+    { name: "Courses", href: "/student/courses", icon: BookOpen },
+    { name: "Profile", href: "/student/profile", icon: User },
+    { name: "Settings", href: "/student/settings", icon: Settings },
+    { name: "Notification", href: "/student/notifications", icon: Bell },
   ];
 
   return (
-    <div className="relative">
+    <div className="relative min-h-screen">
       {/* SIDEBAR */}
       <aside
         className={`fixed top-16 left-0 h-[calc(100vh-64px)]
@@ -54,8 +42,9 @@ export default function TeacherLayout({
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-slate-800">
           {!collapsed && (
-            <h2 className="text-lg font-semibold text-white">Instructor</h2>
+            <h2 className="text-lg font-semibold text-white">Student Panel</h2>
           )}
+
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="p-1 rounded hover:bg-slate-800"
@@ -65,7 +54,7 @@ export default function TeacherLayout({
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-3 py-4 space-y-2 overflow-visible">
+        <nav className="flex-1 px-3 py-4 space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -79,27 +68,17 @@ export default function TeacherLayout({
                       ? "bg-blue-600 text-white"
                       : "hover:bg-slate-800 hover:text-white"
                   }
-                  ${collapsed ? "justify-center" : "gap-3"}
-                  `}
+                  ${collapsed ? "justify-center" : "gap-3"}`}
                 >
-                  {/* Icon */}
                   <Icon size={18} />
 
-                  {/* Label when expanded */}
                   {!collapsed && (
                     <span className="text-sm font-medium">{item.name}</span>
                   )}
 
-                  {/* Tooltip when collapsed */}
+                  {/* Tooltip */}
                   {collapsed && (
-                    <div
-                      className="absolute left-full ml-4
-                      px-3 py-1.5 rounded-md
-                      bg-slate-800 text-white text-xs font-medium
-                      whitespace-nowrap shadow-lg
-                      opacity-0 group-hover:opacity-100
-                      transition-opacity duration-200"
-                    >
+                    <div className="absolute left-full ml-4 px-3 py-1.5 rounded-md bg-slate-800 text-white text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition">
                       {item.name}
                     </div>
                   )}
@@ -114,7 +93,7 @@ export default function TeacherLayout({
       <motion.main
         animate={{ marginLeft: collapsed ? 80 : 256 }}
         transition={{ type: "spring", stiffness: 260, damping: 25 }}
-        className=" min-h-screen p-6"
+        className="min-h-screen bg-gray-50 p-6 "
       >
         {children}
       </motion.main>

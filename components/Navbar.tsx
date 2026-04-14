@@ -54,7 +54,7 @@ export default function NavBar() {
               <>
                 <Button
                   variant="secondary"
-                  onClick={() => router.push("/login")}
+                  onClick={() => router.push("/auth/login")}
                   className="px-4 py-2 rounded-md font-semibold text-md"
                 >
                   Login
@@ -62,7 +62,7 @@ export default function NavBar() {
 
                 <Button
                   variant="secondary"
-                  onClick={() => router.push("/signup")}
+                  onClick={() => router.push("/auth/signup")}
                   className="px-4 py-2 rounded-md font-semibold text-md"
                 >
                   Sign Up
@@ -125,14 +125,14 @@ export default function NavBar() {
 
               <div className="flex gap-3 pt-4 border-t border-gray-700">
                 <Link
-                  href="/login"
+                  href="/auth/login"
                   className="flex-1 text-center px-4 py-2 rounded-md bg-purple-500 text-white"
                 >
                   Login
                 </Link>
 
                 <Link
-                  href="/signup"
+                  href="/auth/signup"
                   className="flex-1 text-center px-4 py-2 rounded-md bg-purple-500 text-white"
                 >
                   Sign Up

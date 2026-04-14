@@ -109,9 +109,7 @@ const CreateCoursePage = () => {
     });
 
     if (res.ok) {
-      toast.success("Course Created Successfully!", {
-        className: "bg-green-600 text-white",
-      });
+      toast.success("Course Created Successfully!");
       router.push("/my-courses");
     } else {
       toast.error("Something went wrong");

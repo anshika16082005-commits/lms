@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const LoginTest = () => {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, setUserRole } = useAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [role, setRole] = useState<string>("");
@@ -94,13 +94,8 @@ const LoginTest = () => {
         return;
       }
       login();
-      if (data.user.role === "admin") {
-        router.push("/admin/dashboard");
-      } else if (data.user.role === "instructor") {
-        router.push("/dashteach");
-      } else {
-        router.push("/profile");
-      }
+      setUserRole(data.user.role);
+      router.replace(`/${data.user.role}/dashboard`);
     } catch (error) {
       setErrors({
         apiError: "Something went wrong. Please try again.",

@@ -6,20 +6,19 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import {
   LayoutDashboard,
+  PlusCircle,
   BookOpen,
   Users,
-  GraduationCap,
   Wallet,
   BarChart3,
-  AlertTriangle,
-  TrendingUp,
-  Bell,
+  User,
   Settings,
   ChevronRight,
   ChevronLeft,
+  Bell,
 } from "lucide-react";
 
-export default function AdminLayout({
+export default function TeacherLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -28,17 +27,23 @@ export default function AdminLayout({
   const [collapsed, setCollapsed] = useState(false);
 
   const menuItems = [
-    { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-    { name: "Course Manage", href: "/admin/coursemanage", icon: BookOpen },
-    { name: "User Manage", href: "/admin/usermanage", icon: Users },
-
-    //todo:Implement payout functionality if possible
-    // { name: "Payouts", href: "/admin/payouts", icon: Wallet },
-
-    //todo:Course analytics implement
-    // { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-    { name: "Notifications", href: "/admin/notify", icon: Bell },
-    { name: "Settings", href: "/admin/settings", icon: Settings },
+    {
+      name: "Dashboard",
+      href: "/instructor/dashboard",
+      icon: LayoutDashboard,
+    },
+    {
+      name: "Create Course",
+      href: "/instructor/create-course",
+      icon: PlusCircle,
+    },
+    { name: "My Courses", href: "/instructor/my-courses", icon: BookOpen },
+    { name: "Students", href: "/instructor/student", icon: Users },
+    { name: "Earnings", href: "/instructor/earnings", icon: Wallet },
+    { name: "Analytics", href: "/instructor/analytics", icon: BarChart3 },
+    { name: "Profile", href: "/instructor/profile", icon: User },
+    { name: "Settings", href: "/instructor/setting", icon: Settings },
+    { name: "Notification", href: "/instructor/notifications", icon: Bell },
   ];
 
   return (
@@ -53,7 +58,7 @@ export default function AdminLayout({
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-slate-800">
           {!collapsed && (
-            <h2 className="text-lg font-semibold text-white">Admin Panel</h2>
+            <h2 className="text-lg font-semibold text-white">Instructor</h2>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
@@ -84,12 +89,12 @@ export default function AdminLayout({
                   {/* Icon */}
                   <Icon size={18} />
 
-                  {/* Label */}
+                  {/* Label when expanded */}
                   {!collapsed && (
                     <span className="text-sm font-medium">{item.name}</span>
                   )}
 
-                  {/* Tooltip */}
+                  {/* Tooltip when collapsed */}
                   {collapsed && (
                     <div
                       className="absolute left-full ml-4
@@ -113,7 +118,7 @@ export default function AdminLayout({
       <motion.main
         animate={{ marginLeft: collapsed ? 80 : 256 }}
         transition={{ type: "spring", stiffness: 260, damping: 25 }}
-        className="min-h-screen p-6"
+        className=" min-h-screen p-6"
       >
         {children}
       </motion.main>

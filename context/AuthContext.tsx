@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, {
+import {
   createContext,
   useContext,
   useState,
@@ -14,6 +14,9 @@ interface AuthContextType {
   isLoggedIn: boolean;
   login: () => void;
   logout: () => void;
+
+  role: string;
+  setUserRole: (role: string) => void;
 }
 
 // Create the context with a default value
@@ -22,6 +25,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Create a provider component
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState("student");
   const router = useRouter();
 
   useEffect(() => {
@@ -41,8 +45,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     router.replace("/");
   };
 
+  const setUserRole = (role: string) => {
+    setRole(role);
+    localStorage.setItem("user-role", role);
+  };
+
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, login, logout, role, setUserRole }}
+    >
       {children}
     </AuthContext.Provider>
   );

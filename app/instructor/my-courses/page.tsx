@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BookOpen, Users, IndianRupee, Plus } from "lucide-react";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import ConfirmDeleteDialog from "@/components/confirmDelete";
 
 type Course = {
   _id?: string;
@@ -155,12 +157,7 @@ export default function MyCoursesPage() {
                     >
                       Manage
                     </Link>
-                    <button
-                      onClick={() => deleteCourse(course._id!)}
-                      className="flex items-center bg-red-600 text-sm hover:bg-red-700 transition text-white px-2 py-1 rounded-md shadow-sm font-semibold"
-                    >
-                      Delete
-                    </button>
+                    <ConfirmDeleteDialog courseId={`${course._id}`} />
                   </span>
                 </div>
               </div>
