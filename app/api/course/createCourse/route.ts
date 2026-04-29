@@ -88,7 +88,8 @@ export async function POST(request: NextRequest): Promise<Response> {
           );
         },
       );
-      bufferToStream(buffer).pipe(uploadStream);
+      // bufferToStream(buffer).pipe(uploadStream);
+      uploadStream.end(buffer);
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

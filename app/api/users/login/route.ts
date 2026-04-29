@@ -9,8 +9,6 @@ export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { email, password, role } = reqBody;
-    //validation
-    console.log(reqBody);
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json(
@@ -49,6 +47,8 @@ export async function POST(request: NextRequest) {
     response.cookies.set("token", token, {
       httpOnly: true,
       path: "/",
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
+      sameSite: "strict",
     });
     return response;
   } catch (error: any) {

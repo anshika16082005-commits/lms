@@ -17,11 +17,14 @@ import { toast } from "react-hot-toast";
 
 type confirmDeleteProps = {
   courseId: string;
+  onConfirm: () => void;
 };
-export default function ConfirmDeleteDialog({ courseId }: confirmDeleteProps) {
+export default function ConfirmDeleteDialog({
+  courseId,
+  onConfirm,
+}: confirmDeleteProps) {
   const [open, setOpen] = useState(false);
 
-  //todo: handle the on delete course view hiding(re-fetching)
   const handleDelete = async () => {
     try {
       const res = await fetch(`/api/mycourses?courseId=${courseId}`, {
@@ -29,6 +32,7 @@ export default function ConfirmDeleteDialog({ courseId }: confirmDeleteProps) {
       });
       const { message } = await res.json();
       toast.success(message);
+      onConfirm();
       setOpen(false);
     } catch (err) {
       toast.error("Course Delete Failed");

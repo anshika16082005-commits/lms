@@ -65,10 +65,10 @@ export async function DELETE(request: NextRequest) {
     if (course.thumbnail.public_id !== undefined) {
       await cloudinary.uploader.destroy(course.thumbnail.public_id);
     }
-    // const createdBy = request.headers.get("x-user-id");
-    // await User.findByIdAndUpdate(createdBy, {
-    //   $pull: { createdCourses: courseId },
-    // });
+    const createdBy = request.headers.get("x-user-id");
+    await User.findByIdAndUpdate(createdBy, {
+      $pull: { createdCourses: courseId },
+    });
     return NextResponse.json({
       message: "Course deleted successfully",
       status: 200,
@@ -78,8 +78,22 @@ export async function DELETE(request: NextRequest) {
   }
 }
 
-export async function UPDATE(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   try {
+    const userId = request.headers.get("x-user-id");
+    const user = await User.findById(userId);
+    if (!user) {
+      return NextResponse.json(
+        { message: "User does not exist" },
+        { status: 404 },
+      );
+    }
+    if (user.role !== "instructor") {
+      return NextResponse.json(
+        { message: "Only instructors are allowed" },
+        { status: 401 },
+      );
+    }
     const courseId = request.nextUrl.searchParams.get("courseId");
     if (!courseId) {
       return NextResponse.json(
@@ -87,7 +101,81 @@ export async function UPDATE(request: NextRequest) {
         { status: 400 },
       );
     }
-    const course = await Course.findByIdAndUpdate(courseId, {});
+
+    const formdata = await request.formData();
+    const title = formdata.get("title") as string;
+    const description = formdata.get("description") as string;
+    const thumbnail = formdata.get("thumbnail") as File | null;
+    const category = formdata.get("category") as string;
+    const level = formdata.get("level") as string;
+    const duration = formdata.get("duration") as string;
+    //todo: validate the data and handle the thumbnail update separately
+
+    const updateFields: Record<string, any> = {};
+    if (title) updateFields.title = title;
+    if (description) updateFields.description = description;
+    if (category) updateFields.category = category;
+    if (level) updateFields.level = level;
+    if (duration) updateFields.duration = duration;
+
+    if (thumbnail) {
+      const arrayBuffer = await thumbnail?.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer!);
+      const course = await Course.findById(courseId);
+      const upload_thumbnail = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: process.env.CLOUDINARY_IMAGE_FOLDER,
+            public_id: course?.thumbnail.public_id,
+            overwrite: true,
+            invalidate: true,
+          },
+          async (error, result) => {
+            if (error || !result) {
+              reject(error);
+            } else {
+              const updatedCourse = await Course.findByIdAndUpdate(
+                courseId,
+                {
+                  $set: {
+                    thumbnail: {
+                      url: result.secure_url,
+                      public_id: result.public_id,
+                    },
+                  },
+                },
+                { new: true, runValidators: true },
+              );
+              resolve(updatedCourse);
+            }
+          },
+        );
+        uploadStream.end(buffer);
+      });
+
+      if (!upload_thumbnail) {
+        return NextResponse.json(
+          { error: "Failed to upload thumbnail" },
+          { status: 500 },
+        );
+      }
+    }
+
+    //todo: update course details and return the updated course details in response
+    const course = await Course.findByIdAndUpdate(
+      courseId,
+      {
+        $set: {
+          ...updateFields,
+        },
+      },
+      { returnDocument: "after", runValidators: true },
+    );
+    return NextResponse.json({
+      message: "Course updated successfully",
+      success: true,
+      data: course,
+    });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

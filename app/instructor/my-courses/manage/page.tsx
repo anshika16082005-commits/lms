@@ -1,9 +1,8 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Video, FileText, File, HelpCircle, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { set } from "mongoose";
 // Polish UI: add lesson deletion, improve styles
 
 export default function ManageCourse() {

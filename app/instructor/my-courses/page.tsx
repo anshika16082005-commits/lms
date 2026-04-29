@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { BookOpen, Users, IndianRupee, Plus } from "lucide-react";
-import toast from "react-hot-toast";
-import { Button } from "@/components/ui/button";
+import { BookOpen, Users, IndianRupee } from "lucide-react";
 import ConfirmDeleteDialog from "@/components/confirmDelete";
 
 type Course = {
@@ -25,20 +23,6 @@ type Course = {
 export default function MyCoursesPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
-  const deleteCourse = async (courseId: string) => {
-    try {
-      const res = await fetch(`/api/mycourses?courseId=${courseId}`, {
-        method: "DELETE",
-      });
-      const { message } = await res.json();
-      toast.success(message);
-
-      console.log(message);
-      setCourses(courses.filter((course) => course._id !== courseId));
-    } catch (error) {
-      toast.error("Error deleting course:");
-    }
-  };
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -77,7 +61,7 @@ export default function MyCoursesPage() {
           <h1 className="text-2xl font-bold text-gray-900">My Courses</h1>
 
           <Link
-            href="/createcourse"
+            href="/instructor/create-course"
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             + Create New Course
@@ -152,12 +136,17 @@ export default function MyCoursesPage() {
 
                   <span className="flex items-center gap-1">
                     <Link
-                      href={`/my-courses/manage/?courseId=${course._id}`}
+                      href={`/instructor/my-courses/manage/?courseId=${course._id}`}
                       className="flex items-center bg-blue-600 text-sm hover:bg-blue-700 transition text-white px-2 py-1 rounded-md shadow-sm font-semibold"
                     >
                       Manage
                     </Link>
-                    <ConfirmDeleteDialog courseId={`${course._id}`} />
+                    <ConfirmDeleteDialog
+                      courseId={`${course._id}`}
+                      onConfirm={() => {
+                        setCourses(courses.filter((c) => c._id !== course._id));
+                      }}
+                    />
                   </span>
                 </div>
               </div>

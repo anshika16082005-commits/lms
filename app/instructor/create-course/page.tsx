@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -25,6 +26,7 @@ const CreateCoursePage = () => {
   const router = useRouter();
   const [thumbnail, setThumbnail] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
+  const [creating, setCreating] = useState<boolean>(false);
 
   const [errors, setErrors] = useState<Partial<Record<keyof Course, string>>>(
     {},
@@ -110,7 +112,7 @@ const CreateCoursePage = () => {
 
     if (res.ok) {
       toast.success("Course Created Successfully!");
-      router.push("/my-courses");
+      router.push("/instructor/my-courses");
     } else {
       toast.error("Something went wrong");
     }
@@ -275,10 +277,11 @@ const CreateCoursePage = () => {
         {/* Submit */}
         <div className="flex justify-end pt-6 border-t">
           <button
+            onClick={() => setCreating(true)}
             type="submit"
             className="bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 transition"
           >
-            Create Course
+            {creating ? <Loader className="animate-spin" /> : "Create Course"}
           </button>
         </div>
       </form>
