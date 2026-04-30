@@ -1,5 +1,4 @@
 import { connect } from "@/dbConfig/dbConfig";
-import bufferToStream from "@/helpers/bufferToStream";
 import cloudinary from "@/lib/cloudinary";
 import Course from "@/models/courseModel";
 import User from "@/models/users";
@@ -88,7 +87,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           );
         },
       );
-      // bufferToStream(buffer).pipe(uploadStream);
+
       uploadStream.end(buffer);
     });
   } catch (error: any) {

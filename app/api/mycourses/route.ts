@@ -62,11 +62,14 @@ export async function DELETE(request: NextRequest) {
     }
 
     const course = await Course.findByIdAndDelete(courseId);
+    if (!course) {
+      return NextResponse.json({ error: "Course not found" }, { status: 404 });
+    }
     if (course.thumbnail.public_id !== undefined) {
       await cloudinary.uploader.destroy(course.thumbnail.public_id);
     }
-    const createdBy = request.headers.get("x-user-id");
-    await User.findByIdAndUpdate(createdBy, {
+    const instructor = request.headers.get("x-user-id");
+    await User.findByIdAndUpdate(instructor, {
       $pull: { createdCourses: courseId },
     });
     return NextResponse.json({
@@ -109,7 +112,6 @@ export async function PUT(request: NextRequest) {
     const category = formdata.get("category") as string;
     const level = formdata.get("level") as string;
     const duration = formdata.get("duration") as string;
-    //todo: validate the data and handle the thumbnail update separately
 
     const updateFields: Record<string, any> = {};
     if (title) updateFields.title = title;
@@ -159,9 +161,14 @@ export async function PUT(request: NextRequest) {
           { status: 500 },
         );
       }
+
+      return NextResponse.json({
+        message: "Course thumbnail updated successfully",
+        success: true,
+        data: upload_thumbnail,
+      });
     }
 
-    //todo: update course details and return the updated course details in response
     const course = await Course.findByIdAndUpdate(
       courseId,
       {

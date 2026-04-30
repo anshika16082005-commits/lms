@@ -125,7 +125,7 @@ export default function Page() {
               <h2
                 className="text-xl font-semibold hover:underline mt-2"
                 onClick={() => {
-                  router.push(`/coursedesc/${course._id}`);
+                  router.push(`/student/coursedesc/${course._id}`);
                 }}
               >
                 {course.title}

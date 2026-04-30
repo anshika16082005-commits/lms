@@ -32,7 +32,7 @@ export const config = {
     "/student/:path*",
     "/admin/:path*",
     "/api/course/createCourse",
-    "/api/mycourses",
+    "/api/mycourses/:path*",
     "/api/instructor/student",
     "/api/course/enroll",
     "/api/admin/usermanage",
