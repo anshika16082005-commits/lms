@@ -45,24 +45,39 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
-    const { modules } = await request.json();
+    const { module } = await request.json();
 
-    if (!modules) {
+    if (!module) {
       return NextResponse.json(
-        { error: "Invalid modules data" },
+        { error: "Invalid module data" },
         { status: 400 },
       );
     }
 
-    const updateModule: Record<string, unknown> = {};
+    const updateModule: Record<string, any> = {};
 
-    if (modules.title) {
-      updateModule["modules.$.title"] = modules.title;
+    if (module.title) {
+      updateModule["modules.$.title"] = module.title;
     }
-    if (modules.description) {
-      updateModule["modules.$.description"] = modules.description;
+    if (module.description) {
+      updateModule["modules.$.description"] = module.description;
     }
 
+    const duplicateModule = course.modules.some(
+      (mod: any) =>
+        mod.title.toLowerCase() === module.title?.toLowerCase() &&
+        mod.description.toLowerCase() === module.description?.toLowerCase(),
+    );
+
+    if (duplicateModule) {
+      return NextResponse.json(
+        {
+          error:
+            "A module with the same title and description already exists in the course",
+        },
+        { status: 400 },
+      );
+    }
     const updateCourse = await Course.updateOne(
       { _id: courseId, "modules._id": moduleId },
       {
@@ -88,7 +103,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-//todo : update lessons in module and also add delete lesson in module
+
 export async function POST(request: NextRequest) {
   try {
     const userId = request.headers.get("x-user-id");
@@ -120,48 +135,39 @@ export async function POST(request: NextRequest) {
     if (!course) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
-    const { modules } = await request.json();
-    if (!modules) {
+    const { module } = await request.json();
+    if (!module || !module.title || !module.description) {
       return NextResponse.json(
-        { error: "Modules are required" },
+        { error: "Module is required" },
         { status: 400 },
       );
     }
 
     const duplicateModule = course.modules.some(
       (mod: any) =>
-        mod.title.toLowerCase() === modules.title.toLowerCase() &&
-        mod.description.toLowerCase() === modules.description.toLowerCase(),
-      // mod.lessons.length === modules.lessons.length &&
-      // mod.lessons.every((les: any, index: number) => {
-      //   const lesson = modules.lessons[index];
-      //   return (
-      //     les.title.toLowerCase() === lesson.title.toLowerCase() &&
-      //     les.description.toLowerCase() === lesson.description.toLowerCase() &&
-      //     les.url.toLowerCase() === lesson.url.toLowerCase() &&
-      //     les.type.toLowerCase() === lesson.type.toLowerCase() &&
-      //     les.isPreview === lesson.isPreview &&
-      //     les.duration === lesson.duration
-      //   );
-      // }),
+        mod.title.toLowerCase() === module.title?.toLowerCase() &&
+        mod.description.toLowerCase() === module.description?.toLowerCase(),
     );
 
     if (duplicateModule) {
       return NextResponse.json(
-        { error: "A module with this title already exists" },
+        {
+          error:
+            "A module with the same title and description already exists in the course",
+        },
         { status: 400 },
       );
     }
 
-    const newModule: Record<string, unknown> = {};
-    if (modules.title) {
-      newModule["title"] = modules.title;
+    const newModule: Record<string, any> = {};
+    if (module.title) {
+      newModule["title"] = module.title;
     }
-    if (modules.description) {
-      newModule["description"] = modules.description;
+    if (module.description) {
+      newModule["description"] = module.description;
     }
-    if (modules.lessons) {
-      newModule["lessons"] = modules.lessons;
+    if (module.lessons) {
+      newModule["lessons"] = module.lessons;
     }
     const updateCourse = await Course.findByIdAndUpdate(
       { _id: courseId },
@@ -172,7 +178,7 @@ export async function POST(request: NextRequest) {
       },
       { new: true },
     ).select(
-      "-thumbnail -lectures -enrolledStudents -instructor -createdAt -updatedAt",
+      "-thumbnail -lectures -enrolledStudents -instructor -createdAt -updatedAt -_id",
     );
     if (!updateCourse) {
       return NextResponse.json(
